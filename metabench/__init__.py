@@ -1,3 +1,1 @@
-from metabench.base.benchmark import *
-from metabench.meta import *
-from metabench.problems import *
+__version__ = '0.0.0'
