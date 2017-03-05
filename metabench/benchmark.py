@@ -1,9 +1,17 @@
+"""
+File: benchmark.py
+Author: Come Bertrand
+Email: bertrand.cosme@gmail.com
+Github: https://github.com/ComeBertrand
+Description:
+"""
+
 from itertools import product
 from collections import OrderedDict
 
 
 class Benchmark(object):
-    """ Benchmark of metaheuristic(s) runs on problem(s).
+    """ Benchmark of metaheuristic(s) running on problem(s).
 
     """
     def __init__(self):
@@ -12,12 +20,18 @@ class Benchmark(object):
         self.results = OrderedDict()
 
     def add_metaheuristic(self, metaheuristic_class, *args, **kwargs):
+        """
+        """
         self.metaheuristics.append((metaheuristic_class, args, kwargs))
 
     def add_problem(self, problem_class, *args, **kwargs):
+        """
+        """
         self.problems.append((problem_class, args, kwargs))
 
     def run(self):
+        """
+        """
         self.results = OrderedDict()
         for meta, prob in product(self.metaheuristics, self.problems):
             meta_class, meta_attributes, meta_key_attributes = meta
