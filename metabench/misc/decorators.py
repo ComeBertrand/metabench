@@ -12,19 +12,20 @@ from decorator import decorator
 def not_implemented_for(*type_names):
     @decorator
     def wrapper(f, *args, **kwargs):
-        item = args[0]
-        item_type = item.__class__.__name__
-        item_type = item_type.lower()
+        solution = args[0]
+        enc_type = solution.encoding.__class__.__name__
+        enc_type = enc_type.lower()
         match = True
 
         for type_name in type_names:
-            if type_name.lower() == item_type:
+            if type_name.lower() == enc_type:
                 match = False
+                break
 
         if not match:
             raise NotImplementedError('Function {0.__name__} is not'
                                       ' implemented for {1}'.format(f,
-                                                                    item_type))
+                                                                    enc_type))
         else:
             return f(*args, **kwargs)
     return wrapper
@@ -33,14 +34,15 @@ def not_implemented_for(*type_names):
 def implemented_for(*type_names):
     @decorator
     def wrapper(f, *args, **kwargs):
-        item = args[0]
-        item_type = item.__class__.__name__
-        item_type = item_type.lower()
+        solution = args[0]
+        enc_type = solution.encoding.__class__.__name__
+        enc_type = enc_type.lower()
         match = False
 
         for type_name in type_names:
-            if type_name.lower() == item_type:
+            if type_name.lower() == enc_type:
                 match = True
+                break
 
         if not match:
             raise NotImplementedError('Function {0.__name__} is only '
