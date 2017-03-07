@@ -7,15 +7,45 @@ Description: Describe how to represent a solution.
 """
 
 import math
+from functools import partial
 
 import numpy as np
 
-import metabench.misc.distances as dist
+from metabench.misc.distances import sol_distance
 from metabench.prob.solution import Solution
+
+
+class Boundaries(np.ndarray):
+    def __new__(cls, minimums, maximums, type=np.int):
+        len_minimums = len(minimums)
+        if len_minimums != len(maximums):
+            raise ValueError('Length of minimums and maximums are unequal')
+
+        err_indexes = []
+        for i in range(len_minimums):
+            if maximums[i] < minimums[i]:
+                err_indexes.append(i)
+        if err_indexes:
+            raise ValueError('Maximum bounding values are inferior to the '
+                             'minimum bounding value at the following indexes '
+                             ': {}'.format(err_indexes))
+
+        epsilon = np.finfo(np.float).epsilon
+        bounds = np.array([[x, y, np.max(y-x, epsilon)] for x, y in
+                           zip(minimums, maximums)], type)
+        obj = np.asarray(bounds).view(cls)
+        return obj
+
+    def relativize(self, array):
+        return array / np.transpose(self)[2]
 
 
 class Encoding(object):
     """Abstract class for the encodings."""
+
+    def __init__(self, boundaries=None, distance=None):
+        self.boundaries = boundaries
+        self.distance = distance
 
     def distance(self, solution_1, solution_2):
         """Get the distance between two solutions arrays.
@@ -30,6 +60,8 @@ class Encoding(object):
             float: the distance between the two solutions arrays.
 
         """
+        if self.distance is None:
+            raise NotImplementedError('No distance is given to this encoding')
         if solution_1.encoding != self or solution_2.encoding != self:
             raise ValueError('{0.__class__.__name__} can only compute distance'
                              ' between solutions that are encoded with '
@@ -43,20 +75,23 @@ class BinaryEncoding(Encoding):
     Args:
         size (int): Size of the solution array.
         distance (func): Distance function used between solutions. Default is
-            the dist.hamming_distance.
+            None (meaning than the hamming distance will be used (norm 0)).
 
     Attributes:
         size (int): Size of the solution array.
         distance (func): Distance function used between solutions.
 
     """
-    def __init__(self, size, distance=dist.hamming_distance):
-        super().__init__()
+    def __init__(self, size, distance=None):
+        if distance is None:
+            distance = partial(sol_distance, ord=0)
+
+        super().__init__(distance=distance)
+
         if size <= 0:
             raise ValueError('Cannot encode solution on an array of negative'
                              ' or empty size')
         self.size = size
-        self.distance = distance
 
     def generate_random_solution(self):
         """Generate a random solution.
@@ -82,32 +117,36 @@ class BinaryEncoding(Encoding):
 
 
 class DiscreteEncoding(Encoding):
-    def __init__(self, boundaries, distance=dist.manhattan_distance):
-        super().__init__()
-        self.boundaries = boundaries
+    def __init__(self, boundaries, distance=None):
+        if distance is None:
+            distance = partial(sol_distance,
+                               boundaries=boundaries,
+                               ord=1)
+        super().__init__(boundaries, distance)
         self.size = len(boundaries)
-        self.distance = distance
 
     def generate_random_solution(self):
         values = []
         for i in range(self.size):
-            values.append(np.random.randint(self.boundaries[i][0],
-                                            self.boundaries[i][1]))
+            values.append(np.random.random_integers
+                          (self.boundaries[i][0], self.boundaries[i][1]))
         solution = Solution(np.array(values, np.int), self)
         return solution
 
     def space_size(self):
         space_size = 1.
         for i in range(self.size):
-            space_size *= (self.boundaries[i][1] - self.boundaries[i][0])
+            space_size *= (self.boundaries[i][1] - self.boundaries[i][0] + 1)
         return space_size
 
 
 class RealVector(Encoding):
-    def __init__(self, boundaries, distance=dist.euclidian_distance):
-        super().__init__()
-        self.boundaries = boundaries
-        self.distance = distance
+    def __init__(self, boundaries, distance=None):
+        if distance is None:
+            distance = partial(sol_distance,
+                               boundaries=boundaries,
+                               ord=2)
+        super().__init__(boundaries, distance)
 
     def generate_random_solution(self):
         values = []
@@ -144,8 +183,7 @@ class PermutationEncoding(Encoding):
 class MixedEncoding(Encoding):
     """TODO: work on this to make work with numpy arrays"""
     def __init__(self, boundaries, types):
-        super().__init__()
-        self.boundaries = boundaries
+        super().__init__(boundaries)
         self.types = types
 
     def generate_random_solution(self):
@@ -154,8 +192,8 @@ class MixedEncoding(Encoding):
             if self.types[i] is bool:
                 sol.append(np.random.randint(2))
             elif self.types[i] is int:
-                sol.append(np.random.randint(self.boundaries[i][0],
-                                             self.boundaries[i][1]))
+                sol.append(np.random.random_integers
+                           (self.boundaries[i][0], self.boundaries[i][1]))
             elif self.types[i] is float:
                 sol.append(np.random.uniform(self.boundaries[i][0],
                                              self.boundaries[i][1]))
