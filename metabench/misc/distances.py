@@ -9,13 +9,12 @@ Description:
 import numpy as np
 
 
-def sol_distance(s1, s2, boundaries=None, ord=2):
+def sol_distance(s1, s2, normalize=None, ord=2):
+    if normalize is None:
+        def normalize(array):
+            return array
+
     if s1.shape != s2.shape:
         raise ValueError("Undefined for sequence of unequal length")
-    if boundaries is None:
-        return np.linalg.norm(s1 - s2, ord=ord)
 
-    if s1.encoding.boundaries != boundaries:
-        raise ValueError("Given boundaries do not apply to the solutions")
-
-    return np.linalg.norm(boundaries.relativize(s1 - s2), ord=ord)
+    return np.linalg.norm(normalize(s1 - s2), ord=ord)
