@@ -19,17 +19,20 @@ class Solution(np.ndarray):
 
     Attributes:
         encoding (Encoding): The encoding of the solution.
+        fitness (float): The fitness of the solution.
 
     """
-    def __new__(cls, input_array, encoding):
+    def __new__(cls, input_array, encoding, fitness=None):
         obj = np.asarray(input_array).view(cls)
         obj.encoding = encoding
+        obj.fitness = fitness
         return obj
 
     def __array_finalize__(self, obj):
         if obj is None:
             return
         self._encoding = getattr(obj, 'encoding', None)
+        self._fitness = getattr(obj, 'fitness', None)
 
     @property
     def encoding(self):
@@ -39,8 +42,28 @@ class Solution(np.ndarray):
     def encoding(self, encoding):
         self._encoding = encoding
 
+    @property
+    def fitness(self):
+        return self._fitness
 
-class MultiSolution(object):
-    """Docstring for MultiSolution. """
-    def __init__(self):
-        """TODO: to be defined1. """
+    @encoding.setter
+    def fitness(self, fitness):
+        self._fitness = fitness
+
+    def copy(self, copy_fitness=False):
+        if copy_fitness:
+            return Solution(super().copy(),
+                            self.encoding,
+                            self.fitness)
+        return Solution(super().copy(),
+                        self.encoding)
+
+    def max_val(self, index):
+        if self.encoding.boundaries is None:
+            return None
+        return self.encoding.boundaries.max_val(index)
+
+    def min_val(self, index):
+        if self.encoding.boundaries is None:
+            return None
+        return self.encoding.boundaries.min_val(index)

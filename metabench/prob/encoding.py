@@ -69,6 +69,12 @@ class Boundaries(np.ndarray):
         obj = np.asarray(bounds).view(cls)
         return obj
 
+    def max_val(self, index):
+        return self.__getitem__((1, index))
+
+    def min_val(self, index):
+        return self.__getitem__((0, index))
+
     def normalize(self, array):
         """Normalize an array according to the space size of its attributes.
 
@@ -237,7 +243,7 @@ class DiscreteEncoding(Encoding):
         return space_size
 
 
-class RealVector(Encoding):
+class RealEncoding(Encoding):
     """Encode a solution as an array of float values.
 
     The norm used to compute distances in the solution space is the euclidian
