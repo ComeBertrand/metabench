@@ -46,7 +46,7 @@ class Solution(np.ndarray):
     def fitness(self):
         return self._fitness
 
-    @encoding.setter
+    @fitness.setter
     def fitness(self, fitness):
         self._fitness = fitness
 

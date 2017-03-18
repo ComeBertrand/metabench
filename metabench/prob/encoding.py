@@ -61,7 +61,7 @@ class Boundaries(np.ndarray):
 
         # Add epsilon to avoid division per 0 when max == min during
         # normalization.
-        epsilon = np.finfo(np.float).epsilon
+        epsilon = np.finfo(np.float).resolution
         bounds = np.array([minimums,
                            maximums,
                            (maximums-minimums) + epsilon],
@@ -70,9 +70,11 @@ class Boundaries(np.ndarray):
         return obj
 
     def max_val(self, index):
+        """Get the maximum value authorized for an index."""
         return self.__getitem__((1, index))
 
     def min_val(self, index):
+        """Get the minimum value authorized for an index."""
         return self.__getitem__((0, index))
 
     def normalize(self, array):
@@ -310,41 +312,5 @@ class PermutationEncoding(Encoding):
 
 class MixedEncoding(Encoding):
     """TODO: work on this to make work with numpy arrays"""
-    def __init__(self, boundaries, types):
-        super().__init__(boundaries)
-        self.types = types
-
-    def generate_random_solution(self):
-        sol = []
-        for i in range(len(self.boundaries)):
-            if self.types[i] is bool:
-                sol.append(np.random.randint(2))
-            elif self.types[i] is int:
-                sol.append(np.random.random_integers
-                           (self.boundaries[0][i], self.boundaries[1][i]))
-            elif self.types[i] is float:
-                sol.append(np.random.uniform(self.boundaries[0][i],
-                                             self.boundaries[1][i]))
-            elif self.types[i] is list:
-                sol.append(np.random.choice(self.boundaries[i]))
-            elif self.types[i] is str:
-                sol.append(np.random.choice(self.boundaries[i]))
-            else:
-                raise TypeError("Unknown type of variable at index {:d} : \
-                                {}".format(i, self.types[i]))
-        return sol
-
-    def space_size(self):
-        if float in self.types:
-            return None
-
-        size = 1.
-        for i in range(len(self.boundaries)):
-            if self.types[i] is bool:
-                size *= 2
-            elif self.types[i] is int:
-                size *= len(range(self.boundaries[0][i],
-                                  self.boundaries[1][i]))
-            else:
-                size *= len(self.boundaries[i])
-        return size
+    def __init__(self):
+        raise NotImplementedError("TODO")

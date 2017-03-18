@@ -3,13 +3,28 @@ File: decorators.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
-Description:
+Description: decorator functions.
 """
 
 from decorator import decorator
 
 
 def not_implemented_for(*type_names):
+    """Insure that the function is not called on certain type of input.
+
+    Args:
+        type_names (list): of str, being the class names of the encodings on
+            which the function cannot be called.
+
+    Returns:
+        func: the decorated function, which has to have a Solution as its first
+            argument.
+
+    Raises:
+        NotImplementedError: when the function is called on a solution with a
+            forbidden encoding.
+
+    """
     @decorator
     def wrapper(f, *args, **kwargs):
         solution = args[0]
@@ -32,6 +47,21 @@ def not_implemented_for(*type_names):
 
 
 def implemented_for(*type_names):
+    """Insure that the function is called only on certain type of input.
+
+    Args:
+        type_names (list): of str, being the class names of the encodings on
+            which the function has to be called.
+
+    Returns:
+        func: the decorated function, which has to have a Solution as its first
+            argument.
+
+    Raises:
+        NotImplementedError: when the function is called on a solution with a
+            forbidden encoding.
+
+    """
     @decorator
     def wrapper(f, *args, **kwargs):
         solution = args[0]

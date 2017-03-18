@@ -3,23 +3,46 @@ File: objective.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
-Description:
+Description: Wrappers for the fitness functions.
 """
-
-import numpy as np
 
 
 class Objective(object):
+    """Wrapper for the fitness functions.
+
+    Args:
+        fitness (func): Fitness function that takes a solution and returns a
+            fitness value as a float.
+        fitness_partial (func): Partial fitness function that can compute a new
+            fitness by evaluating the change made by some moves. Default is
+            None.
+
+    Attributes:
+        fitness (func): Fitness function that takes a solution and returns a
+            fitness value as a float.
+        fitness_partial (func): Partial fitness function that can compute a new
+            fitness by evaluating the change made by some moves. Default is
+            None.
+
+    """
     def __init__(self, fitness, fitness_partial=None):
         self.fitness = fitness
         self.fitness_partial = fitness_partial
 
     def __call__(self, solution, *moves):
+        """Fill the fitness attribute of a solution.
+
+        The fitness function will only be called if the fitness
+
+        """
         if solution.fitness is None:
-            if moves and self.fitness_partial:
-                solution.fitness = self.fitness_partial(solution, *moves)
-            else:
-                solution.fitness = self.fitness(solution)
+            solution.fitness = self._compute_fitness_value(solution, *moves)
+
+    def _compute_fitness_value(self, solution, *moves):
+        if moves and self.fitness_partial:
+            return self.fitness_partial(solution, *moves)
+        else:
+            return self.fitness(solution)
 
 
 class ObjectiveNoisy(object):
@@ -29,4 +52,4 @@ class ObjectiveNoisy(object):
         self.std = std
 
     def __call__(self, solution, *moves):
-        val = super().__call__(solution, *moves)
+        super().__call__(solution, *moves)

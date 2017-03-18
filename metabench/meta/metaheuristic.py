@@ -3,54 +3,93 @@ File: metaheuristic.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
-Description:
+Description: Base classes for the Metaheuristics.
 """
+
+from metabench.statistics import IterStat
 
 
 class Metaheuristic(object):
-
-    """Docstring for Metaheuristic.
+    """Optimization computer that will work on a Problem.
 
     Args:
-        problem
+        problem (Problem): the problem to be optimized.
 
     Attributes:
-        problem
+        problem (Problem): the problem to be optimized.
+        solution (Solution): the current best solution found.
 
     """
 
     def __init__(self, problem):
         self.problem = problem
+        self.solution = None
 
     def run(self):
-        """
+        """Compute to find the best solution of the problem.
+
+        Yield:
+            IterStat: statistic of the current iteration.
+
         """
         raise NotImplementedError('Abstract Class')
 
 
 class SMetaheuristic(Metaheuristic):
-    def __init__(self, problem, *args, **kwargs):
-        super().__init__(problem)
-        self.args = args
-        self.kwargs = kwargs
+    """Solution based metaheuristic.
+
+    Solution based metaheuristics iterate to improve a single solution by
+    trying to improve it by replacing it by its neighbors.
+
+    """
 
     def run(self):
-        solution = self._get_initial_solution()
-        candidates = None
-        while not self._stopping_criterion(solution, candidates):
-            candidates = self._get_candidates(solution)
-            solution = self._select_solution(solution, candidates)
-
-        return solution
+        self.solution = self._get_initial_solution()
+        iter_num = 0
+        while not self._stopping_criterion():
+            candidates = self._get_candidates()
+            self.solution = self._select_solution(candidates)
+            yield IterStat(iter_num, best=self.solution.fitness)
+            iter_num += 1
 
     def _get_initial_solution(self):
+        """Fetch the starting solution.
+
+        Returns:
+            Solution: the starting solution.
+
+        """
         raise NotImplementedError('Abstract Class')
 
-    def _get_candidates(self, solution):
+    def _get_candidates(self):
+        """Get the candidate solutions for the current iteration.
+
+        The next solution will be taken from those candidates.
+
+        Returns:
+            list: of Solution, the neighboring candidates.
+
+        """
         raise NotImplementedError('Abstract Class')
 
-    def _select_solution(self, solution, candidates):
+    def _select_solution(self, candidates):
+        """Select the next iteration solution from the candidates solution.
+
+        Args:
+            candidates (list): of Solution, the candidates solution to replace
+                the current one.
+
+        Returns:
+            Solution: The best candidates for the iteration.
+
+        """
         raise NotImplementedError('Abstract Class')
 
-    def _stopping_criterion(self, solution, candidates):
+    def _stopping_criterion(self):
+        """Stopping criterion of the iterative process.
+
+        Returns:
+            bool: True if the computation should end, False otherwise.
+
+        """
         raise NotImplementedError('Abstract Class')

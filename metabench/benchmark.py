@@ -19,7 +19,7 @@ class Benchmark(object):
         self.problems = []
         self.results = OrderedDict()
 
-    def add_metaheuristic(self, metaheuristic_class, *args, **kwargs):
+    def add_meta(self, metaheuristic_class, *args, **kwargs):
         """
         """
         self.metaheuristics.append((metaheuristic_class, args, kwargs))
@@ -43,5 +43,5 @@ class Benchmark(object):
             self.results[metaheuristic] = []
 
         for metaheuristic in self.results:
-            for iter_stat in metaheuristic:
+            for iter_stat in metaheuristic.run():
                 self.results[metaheuristic].append(iter_stat)
