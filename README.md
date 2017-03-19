@@ -1,1 +1,2 @@
 MetaBench
+Automated benchmarks of metaheuristics performance
