@@ -3,7 +3,7 @@ File: solutions.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
-Description:
+Description: Wrapper for the candidate solutions.
 """
 
 
@@ -51,6 +51,18 @@ class Solution(np.ndarray):
         self._fitness = fitness
 
     def copy(self, copy_fitness=False):
+        """Copy the solution.
+
+        Encoding is always copied, fitness may or may not.
+
+        Args:
+            copy_fitness (bool): If True, the fitness will also be copied. Else
+                the copy will have no fitness.
+
+        Returns:
+            Solution: a copy of itself.
+
+        """
         if copy_fitness:
             return Solution(super().copy(),
                             self.encoding,
@@ -59,11 +71,33 @@ class Solution(np.ndarray):
                         self.encoding)
 
     def max_val(self, index):
+        """Find the maximum value that can be taken on a particular index.
+
+        Args:
+            index (int): The index for which we want to know the maximum value
+                authorized.
+
+        Returns:
+            int/float/None: The maximum value authorized or None if there is no
+                boundaries on the solution encoding.
+
+        """
         if self.encoding.boundaries is None:
             return None
         return self.encoding.boundaries.max_val(index)
 
     def min_val(self, index):
+        """Find the minimum value that can be taken on a particular index.
+
+        Args:
+            index (int): The index for which we want to know the minimum value
+                authorized.
+
+        Returns:
+            int/float/None: The minimum value authorized or None if there is no
+                boundaries on the solution encoding.
+
+        """
         if self.encoding.boundaries is None:
             return None
         return self.encoding.boundaries.min_val(index)

@@ -189,7 +189,8 @@ class BinaryEncoding(Encoding):
             raise ValueError('Cannot encode solution on an array of negative'
                              ' or empty size')
 
-        super().__init__(ord=0)
+        b = Boundaries(np.zeros(size), np.zeros(size) + 1, type=np.int)
+        super().__init__(boundaries=b, ord=0)
 
         self.size = size
 
@@ -217,10 +218,14 @@ class DiscreteEncoding(Encoding):
     distance (norm of order 1).
 
     Args:
-        boundaries (Boundaries): Boundaries on the solution space.
+        boundaries (Boundaries): Boundaries on the solution space, must be of
+            type int.
 
     """
     def __init__(self, boundaries):
+        if not boundaries.dtype == np.int:
+            raise TypeError("The boundaries of a discrete encoding must be of"
+                            " type int")
         super().__init__(boundaries, ord=1)
 
     def generate_random_solution(self):
@@ -252,10 +257,14 @@ class RealEncoding(Encoding):
     distance (norm of order 2).
 
     Args:
-        boundaries (Boundaries): Boundaries on the solution space.
+        boundaries (Boundaries): Boundaries on the solution space. Must be of
+            type float.
 
     """
     def __init__(self, boundaries):
+        if not boundaries.dtype == np.float:
+            raise TypeError("The boundaries of a real encoding must be of"
+                            " type float")
         super().__init__(boundaries, ord=2)
 
     def generate_random_solution(self):
@@ -307,7 +316,7 @@ class PermutationEncoding(Encoding):
         return solution
 
     def space_size(self):
-        return math.factorial(self.size)
+        return math.factorial(len(self.items))
 
 
 class MixedEncoding(Encoding):

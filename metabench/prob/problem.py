@@ -3,23 +3,76 @@ File: problem.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
-Description:
+Description: A problem describe a function or an instance that needs to be
+optimized.
 """
 
 
 class Problem(object):
+    """Problem to be solved by a Metaheuristic.
+
+    The role of the problem is to describe the potential solutions, generate
+    them and evaluate them.
+    It also provide the operators to modify them.
+
+    Args:
+        objective (Objective): The objective (or fitness) function to optimize.
+        encoding (Encoding): The encoding of the candidate solutions.
+        neighborhood (Neighborhood): Neighborhood operator that can be used to
+            find neighboring candidate solutions for a given solution. Default
+            is None.
+
+    Attributes:
+        objective (Objective): The objective (or fitness) function to optimize.
+        encoding (Encoding): The encoding of the candidate solutions.
+        neighborhood (Neighborhood): Neighborhood operator that can be used to
+            find neighboring candidate solutions for a given solution.
+
+    """
     def __init__(self, objective, encoding, neighborhood=None):
         self.objective = objective
         self.encoding = encoding
         self.neighborhood = neighborhood
 
     def evaluate(self, solution, *moves):
+        """Evaluate the fitness of a solution.
+
+        The evaluation can be partial if the moves that lead to its creation
+        are given (and if the objective given at the initialization own a
+        partial fitness function).
+
+        Args:
+            solution (Solution): solution to be evaluated.
+            moves (list): list of modifications that were made on the solution
+                to create it.
+
+        """
         self.objective(solution, *moves)
 
     def generate_solution(self):
+        """Generate a random solution.
+
+        Returns:
+            Solution
+
+        """
         return self.encoding.generate_random_solution()
 
     def get_neighbors(self, solution):
+        """Generate the neighbors of a given solution.
+
+        Args:
+            solution (Solution): solution for which we want to create
+                neighbors.
+
+        Yield:
+            Solution: the neighboring solutions.
+
+        Raises:
+            NotImplementedError: if no Neighborhood was given at the problem
+                creation.
+
+        """
         if self.neighborhood is not None:
             for neighbor in self.neighborhood(solution):
                 yield neighbor
