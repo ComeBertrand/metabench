@@ -34,20 +34,20 @@ class Problem(object):
         self.encoding = encoding
         self.neighborhood = neighborhood
 
-    def evaluate(self, solution, *moves):
+    def evaluate(self, solution, modifs=None):
         """Evaluate the fitness of a solution.
 
-        The evaluation can be partial if the moves that lead to its creation
+        The evaluation can be partial if the modifs that lead to its creation
         are given (and if the objective given at the initialization own a
         partial fitness function).
 
         Args:
             solution (Solution): solution to be evaluated.
-            moves (list): list of modifications that were made on the solution
+            modifs (Modifs): modifications that were made on the solution
                 to create it.
 
         """
-        self.objective(solution, *moves)
+        self.objective(solution, modifs)
 
     def generate_solution(self):
         """Generate a random solution.
@@ -67,6 +67,8 @@ class Problem(object):
 
         Yield:
             Solution: the neighboring solutions.
+            Modifs: the modifications made to the solution to create the
+                neighbor.
 
         Raises:
             NotImplementedError: if no Neighborhood was given at the problem
@@ -74,8 +76,8 @@ class Problem(object):
 
         """
         if self.neighborhood is not None:
-            for neighbor in self.neighborhood(solution):
-                yield neighbor
+            for neighbor, modifs in self.neighborhood(solution):
+                yield neighbor, modifs
         else:
             raise NotImplementedError('No neighborhood operator is implemented'
                                       ' for this problem.')

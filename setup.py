@@ -20,7 +20,7 @@ def read(*filenames, **kwargs):
     return sep.join(buf)
 
 
-long_description = read('README.md')
+long_description = read('README.txt')
 
 
 class PyTest(TestCommand):
@@ -39,8 +39,8 @@ setup(
     name='metabench',
     version=metabench.__version__,
     url='https://github.com/ComeBertrand/metabench/',
-    license='MIT License',
-    author='Come Bertrand',
+    license=metabench.__license__,
+    author=metabench.__author__,
     tests_require=['pytest'],
     install_requires=['numpy>=1.11.2',
                       'decorator>=4.0.11'],

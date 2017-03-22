@@ -26,14 +26,14 @@ class HillClimbing(SMetaheuristic):
         return solution
 
     def _get_candidates(self):
-        candidates = [n for n in self.problem.get_neighbors(self.solution)]
+        candidates = [(n, m) for n, m in self.problem.get_neighbors(self.solution)]
         return candidates
 
     def _select_solution(self, candidates):
         best_fitness = self.solution.fitness
         best_candidate = self.solution
-        for c in candidates:
-            self.problem.evaluate(c)
+        for c, m in candidates:
+            self.problem.evaluate(c, m)
             if c.fitness <= best_fitness:
                 best_fitness = c.fitness
                 best_candidate = c

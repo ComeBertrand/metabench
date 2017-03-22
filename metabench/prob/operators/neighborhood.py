@@ -9,6 +9,7 @@ Description: Operators that create neighbors for a solution.
 import numpy as np
 
 from metabench.misc.decorators import implemented_for
+from metabench.prob.objective import Modifs
 
 
 class Neighborhood(object):
@@ -16,11 +17,11 @@ class Neighborhood(object):
 
     Args:
         move (func): Move function that has to take a solution as its first
-            argument.
+            argument, and return a Solution and a Modifs.
 
     Attributes:
         move (func): Move function that has to take a solution as its first
-            argument.
+            argument, and return a Solution and a Modifs.
 
     """
     def __init__(self, move):
@@ -36,10 +37,12 @@ class Neighborhood(object):
 
         Yield:
             Solution: neighbors to the given solution.
+            Modifs: the modifications made on the solution to create the
+                neighbor.
 
         """
-        for neighbor in self.move(solution, **parameters):
-            yield neighbor
+        for neighbor, modifs in self.move(solution, **parameters):
+            yield neighbor, modifs
 
 
 @implemented_for('BinaryEncoding')
@@ -48,12 +51,15 @@ def move_binary_flip(solution):
     indexes = np.array(range(len(solution)))
     np.random.shuffle(indexes)
     for index in indexes:
-        neighbor = solution.copy()
+        neighbor = solution.copy(True)
+        modifs = Modifs()
         if neighbor[index]:
             neighbor[index] = 0
+            modifs.add_modif(index, 1, 0)
         else:
             neighbor[index] = 1
-        yield neighbor
+            modifs.add_modif(index, 0, 1)
+        yield neighbor, modifs
 
 
 @implemented_for('RealEncoding')
@@ -76,9 +82,14 @@ def move_distance_continuous(solution, step, nb_neighbors):
         vector = np.random.normal(0, 1, len(solution))
         vector /= np.linalg.norm(vector)
         vector *= step
-        neighbor = solution.copy()
+        neighbor = solution.copy(True)
         neighbor += vector
-        yield neighbor
+        neighbor.to_bounds()
+
+        # Modifs is empty, since all attributes of the neighbor are probably
+        # modified.
+        modifs = Modifs()
+        yield neighbor, modifs
 
 
 @implemented_for('DiscreteEncoding')
@@ -103,9 +114,11 @@ def move_substitution(solution):
                                    solution.max_val(index)))
         allowed_values.remove(solution[index])
         for val in allowed_values:
-            neighbor = solution.copy()
+            neighbor = solution.copy(True)
             neighbor[index] = val
-            yield neighbor
+            modifs = Modifs()
+            modifs.add_modif(index, solution[index], val)
+            yield neighbor, modifs
 
 
 @implemented_for('PermutationEncoding')
@@ -125,10 +138,13 @@ def move_swap(solution):
     len_sol = len(solution)
     for i in range(len_sol - 1):
         for j in range(i+1, len_sol):
-            neighbor = solution.copy()
+            neighbor = solution.copy(True)
             neighbor[i] = solution[j]
             neighbor[j] = solution[i]
-            yield neighbor
+            modifs = Modifs()
+            modifs.add_modif(i, solution[i], neighbor[i])
+            modifs.add_modif(j, solution[j], neighbor[j])
+            yield neighbor, modifs
 
 
 @implemented_for('PermutationEncoding')

@@ -101,3 +101,15 @@ class Solution(np.ndarray):
         if self.encoding.boundaries is None:
             return None
         return self.encoding.boundaries.min_val(index)
+
+    def to_bounds(self):
+        """Set the attributes value of the solution to the min/max bounds."""
+        for i in range(len(self)):
+            min_val = self.min_val(i)
+            max_val = self.max_val(i)
+            if min_val is not None:
+                if self.__getitem__(i) < min_val:
+                    self.__setitem__(i, min_val)
+            if max_val is not None:
+                if self.__getitem__(i) > max_val:
+                    self.__setitem__(i, max_val)
