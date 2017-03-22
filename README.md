@@ -22,9 +22,10 @@ Using
     >>> B.run()
     >>> for meta, list_stats in B._results.items():
     ...     for stat in list_stats:
-    ...         print(stat.best)
-    13975.488179892573
-    4360.568874224535
-    2547.5959016063475
-    2547.5959016063475
+    ...         print("{:.2f}".format(stat.best))
+    5291.12
+    552.36
+    105.37
+    0.01
+    0.01
     ```
