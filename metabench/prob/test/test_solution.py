@@ -57,7 +57,7 @@ def real_encoding(boundaries_float):
 
 @pytest.fixture
 def real_solution(real_encoding):
-    return real_encoding.generate_solution()
+    return real_encoding.generate_random_solution()
 
 
 @pytest.fixture
@@ -67,7 +67,7 @@ def permutation_encoding(items):
 
 @pytest.fixture
 def permutation_solution(permutation_encoding):
-    return permutation_encoding.generate_solution()
+    return permutation_encoding.generate_random_solution()
 
 
 def test_generation_solution_binary(binary_encoding):
@@ -108,11 +108,11 @@ def test_generation_solution_permutation(permutation_encoding):
 def test_copy_binary(binary_solution):
     binary_solution.fitness = 1.0
     c1 = binary_solution.copy(copy_fitness=False)
-    assert not c1 is binary_solution
+    assert c1 is not binary_solution
     assert c1.encoding is binary_solution.encoding
     assert c1.fitness is None
     c2 = binary_solution.copy(copy_fitness=True)
-    assert not c2 is binary_solution
+    assert c2 is not binary_solution
     assert c2.encoding is binary_solution.encoding
     assert c2.fitness == binary_solution.fitness
 
@@ -120,11 +120,11 @@ def test_copy_binary(binary_solution):
 def test_copy_discrete(discrete_solution):
     discrete_solution.fitness = 1.0
     c1 = discrete_solution.copy(copy_fitness=False)
-    assert not c1 is discrete_solution
+    assert c1 is not discrete_solution
     assert c1.encoding is discrete_solution.encoding
     assert c1.fitness is None
     c2 = discrete_solution.copy(copy_fitness=True)
-    assert not c2 is discrete_solution
+    assert c2 is not discrete_solution
     assert c2.encoding is discrete_solution.encoding
     assert c2.fitness == discrete_solution.fitness
 
@@ -132,11 +132,11 @@ def test_copy_discrete(discrete_solution):
 def test_copy_real(real_solution):
     real_solution.fitness = 1.0
     c1 = real_solution.copy(copy_fitness=False)
-    assert not c1 is real_solution
+    assert c1 is not real_solution
     assert c1.encoding is real_solution.encoding
     assert c1.fitness is None
     c2 = real_solution.copy(copy_fitness=True)
-    assert not c2 is real_solution
+    assert c2 is not real_solution
     assert c2.encoding is real_solution.encoding
     assert c2.fitness == real_solution.fitness
 
@@ -144,11 +144,11 @@ def test_copy_real(real_solution):
 def test_copy_permutation(permutation_solution):
     permutation_solution.fitness = 1.0
     c1 = permutation_solution.copy(copy_fitness=False)
-    assert not c1 is permutation_solution
+    assert c1 is not permutation_solution
     assert c1.encoding is permutation_solution.encoding
     assert c1.fitness is None
     c2 = permutation_solution.copy(copy_fitness=True)
-    assert not c2 is permutation_solution
+    assert c2 is not permutation_solution
     assert c2.encoding is permutation_solution.encoding
     assert c2.fitness == permutation_solution.fitness
 
@@ -173,8 +173,8 @@ def test_max_min_val_real(real_solution):
 
 def test_max_min_val_permutation(permutation_solution):
     for i in range(NB_ATTRIBUTES):
-        assert permutation_solution.min_val(i) == None
-        assert permutation_solution.max_val(i) == None
+        assert permutation_solution.min_val(i) is None
+        assert permutation_solution.max_val(i) is None
 
 
 def test_to_bounds_binary_up(binary_solution):

@@ -79,8 +79,8 @@ class Objective(object):
 
         Args:
             solution (Solution): The solution to evaluate.
-            modifs (Modifs): List of modifications made on the solution. Default
-                is None.
+            modifs (Modifs): List of modifications made on the solution.
+                Default is None.
 
         """
         if solution.fitness is None or modifs is not None:
@@ -97,7 +97,7 @@ class Objective(object):
             float: The new fitness for the solution.
 
         """
-        if solution.fitness and modifs and self.fitness_partial:
+        if solution.fitness is not None and modifs and self.fitness_partial:
             return self.fitness_partial(solution, modifs)
         else:
             return self.fitness(solution)

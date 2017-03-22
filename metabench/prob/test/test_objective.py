@@ -80,7 +80,7 @@ def test_objective_no_partial(fitness_func,
                               solution,
                               modifs_as_modifs,
                               modifs_empty):
-    o = Objective(fitness_func)
+    o = mb.Objective(fitness_func)
 
     solution.fitness = None
     assert o._compute_fitness_value(solution, None) == VALUE_RETURNED_FIT
@@ -88,12 +88,14 @@ def test_objective_no_partial(fitness_func,
     assert solution.fitness == VALUE_RETURNED_FIT
 
     solution.fitness = None
-    assert o._compute_fitness_value(solution, modifs_as_modifs) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_as_modifs) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_as_modifs)
     assert solution.fitness == VALUE_RETURNED_FIT
 
     solution.fitness = None
-    assert o._compute_fitness_value(solution, modifs_empty) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_empty) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_empty)
     assert solution.fitness == VALUE_RETURNED_FIT
 
@@ -102,7 +104,7 @@ def test_objective_no_partial_fitness(fitness_func,
                                       solution,
                                       modifs_as_modifs,
                                       modifs_empty):
-    o = Objective(fitness_func)
+    o = mb.Objective(fitness_func)
 
     solution.fitness = VALUE_NOT_RETURNED
     assert o._compute_fitness_value(solution, None) == VALUE_RETURNED_FIT
@@ -110,12 +112,14 @@ def test_objective_no_partial_fitness(fitness_func,
     assert solution.fitness == VALUE_NOT_RETURNED
 
     solution.fitness = VALUE_NOT_RETURNED
-    assert o._compute_fitness_value(solution, modifs_as_modifs) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_as_modifs) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_as_modifs)
     assert solution.fitness == VALUE_RETURNED_FIT
 
     solution.fitness = VALUE_NOT_RETURNED
-    assert o._compute_fitness_value(solution, modifs_empty) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_empty) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_empty)
     assert solution.fitness == VALUE_RETURNED_FIT
 
@@ -125,7 +129,7 @@ def test_objective_partial(fitness_func,
                            solution,
                            modifs_as_modifs,
                            modifs_empty):
-    o = Objective(fitness_func, fitness_partial_func)
+    o = mb.Objective(fitness_func, fitness_partial_func)
 
     solution.fitness = None
     assert o._compute_fitness_value(solution, None) == VALUE_RETURNED_FIT
@@ -133,12 +137,14 @@ def test_objective_partial(fitness_func,
     assert solution.fitness == VALUE_RETURNED_FIT
 
     solution.fitness = None
-    assert o._compute_fitness_value(solution, modifs_as_modifs) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_as_modifs) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_as_modifs)
     assert solution.fitness == VALUE_RETURNED_FIT
 
     solution.fitness = None
-    assert o._compute_fitness_value(solution, modifs_empty) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_empty) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_empty)
     assert solution.fitness == VALUE_RETURNED_FIT
 
@@ -148,7 +154,7 @@ def test_objective_partial_fitness(fitness_func,
                                    solution,
                                    modifs_as_modifs,
                                    modifs_empty):
-    o = Objective(fitness_func, fitness_partial_func)
+    o = mb.Objective(fitness_func, fitness_partial_func)
 
     solution.fitness = VALUE_NOT_RETURNED
     assert o._compute_fitness_value(solution, None) == VALUE_RETURNED_FIT
@@ -156,11 +162,13 @@ def test_objective_partial_fitness(fitness_func,
     assert solution.fitness == VALUE_NOT_RETURNED
 
     solution.fitness = VALUE_NOT_RETURNED
-    assert o._compute_fitness_value(solution, modifs_as_modifs) == VALUE_RETURNED_FIT_PART
+    assert (o._compute_fitness_value(solution, modifs_as_modifs) ==
+            VALUE_RETURNED_FIT_PART)
     o(solution, modifs)
     assert solution.fitness == VALUE_RETURNED_FIT_PART
 
     solution.fitness = VALUE_NOT_RETURNED
-    assert o._compute_fitness_value(solution, modifs_empty) == VALUE_RETURNED_FIT
+    assert (o._compute_fitness_value(solution, modifs_empty) ==
+            VALUE_RETURNED_FIT)
     o(solution, modifs_empty)
     assert solution.fitness == VALUE_RETURNED_FIT
