@@ -5,8 +5,9 @@ MetaBench
     to evaluate the performance of metaheuristics on several types of problems.
 
 
-[![Build
-Status](https://travis-ci.org/ComeBertrand/metabench.svg?branch=master)](https://travis-ci.org/ComeBertrand/metabench)
+[![Build Status](https://travis-ci.org/ComeBertrand/metabench.svg?branch=master)](https://travis-ci.org/ComeBertrand/metabench)
+[![Coverage
+Status](https://coveralls.io/repos/github/ComeBertrand/metabench/badge.svg?branch=master)](https://coveralls.io/github/ComeBertrand/metabench?branch=master)
 
 
 Using
