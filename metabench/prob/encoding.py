@@ -73,9 +73,17 @@ class Boundaries(np.ndarray):
         """Get the maximum value authorized for an index."""
         return self.__getitem__((1, index))
 
+    def max_vals(self):
+        """Get all the maximum values authorized for the attributes."""
+        return self.__getitem__(1)
+
     def min_val(self, index):
         """Get the minimum value authorized for an index."""
         return self.__getitem__((0, index))
+
+    def min_vals(self):
+        """Get all the minimum values authorized for the attributes."""
+        return self.__getitem__(0)
 
     def normalize(self, array):
         """Normalize an array according to the space size of its attributes.

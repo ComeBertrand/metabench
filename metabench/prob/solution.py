@@ -86,6 +86,19 @@ class Solution(np.ndarray):
             return None
         return self.encoding.boundaries.max_val(index)
 
+    def max_vals(self):
+        """Give all the maximum values that can be taken by a solution.
+
+        Returns:
+            np.array or None: array of int/float, all the maximums of the
+                attributes, or None if there is no boundaries on the solution
+                encoding.
+
+        """
+        if self.encoding.boundaries is None:
+            return None
+        return self.encoding.boundaries.max_vals()
+
     def min_val(self, index):
         """Find the minimum value that can be taken on a particular index.
 
@@ -102,14 +115,20 @@ class Solution(np.ndarray):
             return None
         return self.encoding.boundaries.min_val(index)
 
+    def min_vals(self):
+        """Give all the minimum values that can be taken by a solution.
+
+        Returns:
+            np.array or None: array of int/float, all the minimums of the
+                attributes, or None if there is no boundaries on the solution
+                encoding.
+
+        """
+        if self.encoding.boundaries is None:
+            return None
+        return self.encoding.boundaries.min_vals()
+
     def to_bounds(self):
         """Set the attributes value of the solution to the min/max bounds."""
-        for i in range(len(self)):
-            min_val = self.min_val(i)
-            max_val = self.max_val(i)
-            if min_val is not None:
-                if self.__getitem__(i) < min_val:
-                    self.__setitem__(i, min_val)
-            if max_val is not None:
-                if self.__getitem__(i) > max_val:
-                    self.__setitem__(i, max_val)
+        np.copyto(self, np.minimum(self.max_vals(), self))
+        np.copyto(self, np.maximum(self.min_vals(), self))

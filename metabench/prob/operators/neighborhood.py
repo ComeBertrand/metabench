@@ -111,7 +111,7 @@ def move_substitution(solution):
     np.random.shuffle(indexes)
     for index in indexes:
         allowed_values = set(range(solution.min_val(index),
-                                   solution.max_val(index)))
+                                   solution.max_val(index) + 1))
         allowed_values.remove(solution[index])
         for val in allowed_values:
             neighbor = solution.copy(True)

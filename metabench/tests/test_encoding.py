@@ -1,51 +1,9 @@
 import math
 
-import pytest
 import numpy as np
 
 import metabench as mb
-
-
-NB_ATTRIBUTES = 5
-MIN_VAL_INT = 0
-MAX_VAL_INT = 4
-MIN_VAL_FLO = 0.0
-MAX_VAL_FLO = 4.0
-
-
-@pytest.fixture
-def min_bound_int():
-    return np.zeros(NB_ATTRIBUTES) + MIN_VAL_INT
-
-
-@pytest.fixture
-def max_bound_int():
-    return np.zeros(NB_ATTRIBUTES) + MAX_VAL_INT
-
-
-@pytest.fixture
-def boundaries_int(min_bound_int, max_bound_int):
-    return mb.Boundaries(min_bound_int, max_bound_int, type=np.int)
-
-
-@pytest.fixture
-def min_bound_float():
-    return np.zeros(NB_ATTRIBUTES, np.float) + MIN_VAL_FLO
-
-
-@pytest.fixture
-def max_bound_float():
-    return np.zeros(NB_ATTRIBUTES, np.float) + MAX_VAL_FLO
-
-
-@pytest.fixture
-def boundaries_float(min_bound_float, max_bound_float):
-    return mb.Boundaries(min_bound_float, max_bound_float, type=np.float)
-
-
-@pytest.fixture
-def list_items():
-    return np.array(range(NB_ATTRIBUTES), np.int)
+from metabench.tests.fixtures import *
 
 
 def test_boundaries_creation_int(min_bound_int, max_bound_int):
@@ -84,6 +42,28 @@ def test_boundaries_min_over_max(min_bound_int, max_bound_int):
 def test_boundaries_epsilon(min_bound_float):
     b = mb.Boundaries(min_bound_float, min_bound_float, type=np.float)
     assert b[2][0] > 0.0
+
+
+def test_boundaries_int_min_max_val(min_bound_int, max_bound_int):
+    b = mb.Boundaries(min_bound_int, max_bound_int, type=np.int)
+    min_vals = b.min_vals()
+    max_vals = b.max_vals()
+    for i in range(NB_ATTRIBUTES):
+        assert min_vals[i] == min_bound_int[i]
+        assert b.min_val(i) == min_bound_int[i]
+        assert max_vals[i] == max_bound_int[i]
+        assert b.max_val(i) == max_bound_int[i]
+
+
+def test_boundaries_float_min_max_val(min_bound_float, max_bound_float):
+    b = mb.Boundaries(min_bound_float, max_bound_float, type=np.float)
+    min_vals = b.min_vals()
+    max_vals = b.max_vals()
+    for i in range(NB_ATTRIBUTES):
+        assert min_vals[i] == min_bound_float[i]
+        assert b.min_val(i) == min_bound_float[i]
+        assert max_vals[i] == max_bound_float[i]
+        assert b.max_val(i) == max_bound_float[i]
 
 
 def test_binary_encoding_creation():
@@ -152,17 +132,17 @@ def test_real_encoding_space_size(boundaries_float):
         e.space_size()
 
 
-def test_permutation_encoding_generate(list_items):
-    e = mb.PermutationEncoding(list_items)
+def test_permutation_encoding_generate(items):
+    e = mb.PermutationEncoding(items)
     s = e.generate_random_solution()
-    assert set(s) == set(list_items)
+    assert set(s) == set(items)
     assert s.encoding is e
     assert s.fitness is None
 
 
-def test_permutation_encoding_space_size(list_items):
-    e = mb.PermutationEncoding(list_items)
-    assert e.space_size() == math.factorial(len(list_items))
+def test_permutation_encoding_space_size(items):
+    e = mb.PermutationEncoding(items)
+    assert e.space_size() == math.factorial(len(items))
 
 
 def test_encoding_abstract_generate():

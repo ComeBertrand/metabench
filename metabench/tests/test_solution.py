@@ -1,73 +1,7 @@
-import pytest
 import numpy as np
 
 import metabench as mb
-
-
-NB_ATTRIBUTES = 5
-MIN_VAL_INT = 0
-MAX_VAL_INT = 4
-MIN_VAL_FLO = 0.0
-MAX_VAL_FLO = 4.0
-
-
-@pytest.fixture
-def boundaries_int():
-    min_bound_int = np.zeros(NB_ATTRIBUTES) + MIN_VAL_INT
-    max_bound_int = np.zeros(NB_ATTRIBUTES) + MAX_VAL_INT
-    return mb.Boundaries(min_bound_int, max_bound_int, type=np.int)
-
-
-@pytest.fixture
-def boundaries_float():
-    min_bound_float = np.zeros(NB_ATTRIBUTES, np.float) + MIN_VAL_FLO
-    max_bound_float = np.zeros(NB_ATTRIBUTES, np.float) + MAX_VAL_FLO
-    return mb.Boundaries(min_bound_float, max_bound_float, type=np.float)
-
-
-@pytest.fixture
-def items():
-    return np.array(range(NB_ATTRIBUTES), np.int)
-
-
-@pytest.fixture
-def binary_encoding():
-    return mb.BinaryEncoding(NB_ATTRIBUTES)
-
-
-@pytest.fixture
-def binary_solution(binary_encoding):
-    return binary_encoding.generate_random_solution()
-
-
-@pytest.fixture
-def discrete_encoding(boundaries_int):
-    return mb.DiscreteEncoding(boundaries_int)
-
-
-@pytest.fixture
-def discrete_solution(discrete_encoding):
-    return discrete_encoding.generate_random_solution()
-
-
-@pytest.fixture
-def real_encoding(boundaries_float):
-    return mb.RealEncoding(boundaries_float)
-
-
-@pytest.fixture
-def real_solution(real_encoding):
-    return real_encoding.generate_random_solution()
-
-
-@pytest.fixture
-def permutation_encoding(items):
-    return mb.PermutationEncoding(items)
-
-
-@pytest.fixture
-def permutation_solution(permutation_encoding):
-    return permutation_encoding.generate_random_solution()
+from metabench.tests.fixtures import *
 
 
 def test_generation_solution_binary(binary_encoding):
@@ -154,24 +88,40 @@ def test_copy_permutation(permutation_solution):
 
 
 def test_max_min_val_binary(binary_solution):
+    min_vals = binary_solution.min_vals()
+    max_vals = binary_solution.max_vals()
     for i in range(NB_ATTRIBUTES):
+        assert min_vals[i] == 0
         assert binary_solution.min_val(i) == 0
+        assert max_vals[i] == 1
         assert binary_solution.max_val(i) == 1
 
 
 def test_max_min_val_discrete(discrete_solution):
+    min_vals = discrete_solution.min_vals()
+    max_vals = discrete_solution.max_vals()
     for i in range(NB_ATTRIBUTES):
+        assert min_vals[i] == MIN_VAL_INT
         assert discrete_solution.min_val(i) == MIN_VAL_INT
+        assert max_vals[i] == MAX_VAL_INT
         assert discrete_solution.max_val(i) == MAX_VAL_INT
 
 
 def test_max_min_val_real(real_solution):
+    min_vals = real_solution.min_vals()
+    max_vals = real_solution.max_vals()
     for i in range(NB_ATTRIBUTES):
+        assert min_vals[i] == MIN_VAL_FLO
         assert real_solution.min_val(i) == MIN_VAL_FLO
+        assert max_vals[i] == MAX_VAL_FLO
         assert real_solution.max_val(i) == MAX_VAL_FLO
 
 
 def test_max_min_val_permutation(permutation_solution):
+    min_vals = permutation_solution.min_vals()
+    max_vals = permutation_solution.max_vals()
+    assert min_vals is None
+    assert max_vals is None
     for i in range(NB_ATTRIBUTES):
         assert permutation_solution.min_val(i) is None
         assert permutation_solution.max_val(i) is None
