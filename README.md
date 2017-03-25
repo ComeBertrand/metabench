@@ -1,8 +1,8 @@
 MetaBench
 =========
 
-    MetaBench (MB) is a Python package for the automated creation of benchmarks
-    to evaluate the performance of metaheuristics on several types of problems.
+MetaBench (MB) is a Python package for the automated creation of benchmarks
+to evaluate the performance of metaheuristics on several types of problems.
 
 
 [![Build Status](https://travis-ci.org/ComeBertrand/metabench.svg?branch=master)](https://travis-ci.org/ComeBertrand/metabench)
@@ -13,7 +13,7 @@ MetaBench
 Using
 -----
 
-    Just write in Python
+Just write in Python
 
     ```python
     >>> import metabench as mb
