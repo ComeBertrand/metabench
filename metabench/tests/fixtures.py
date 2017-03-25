@@ -17,6 +17,12 @@ VALUE_RETURNED_FIT_PART = 2
 NB_NEIGHBORS = 10
 STEP = 0.04
 
+NB_RUNS = 3
+NB_RUNS_FALSE = -3
+NB_ITER = 10
+BASE_SIZE = 256
+BASE_SIZE_FALSE = -256
+
 
 @pytest.fixture
 def min_bound_int():
@@ -138,3 +144,25 @@ def one_type_name_permutation():
 @pytest.fixture
 def two_type_names_binary_discrete():
     return ['BinaryEncoding', 'DiscreteEncoding']
+
+
+@pytest.fixture
+def empty_statistics():
+    return mb.Statistics(NB_RUNS, BASE_SIZE)
+
+
+@pytest.fixture
+def list_records(binary_encoding):
+    full_list_records = []
+    for i in range(NB_RUNS):
+        list_solutions = [binary_encoding.generate_random_solution() for
+                          j in range(NB_ITER)]
+        for f, s in enumerate(list_solutions[::-1]):
+            s.fitness = f + i
+        full_list_records += [(i, s, t) for t, s in enumerate(list_solutions)]
+    return full_list_records
+
+
+@pytest.fixture
+def list_time_tot():
+    return [i for i in range(NB_RUNS)]

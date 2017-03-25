@@ -6,8 +6,6 @@ Github: https://github.com/ComeBertrand
 Description: Base classes for the Metaheuristics.
 """
 
-from metabench.statistics import IterStat
-
 
 class Metaheuristic(object):
     """Optimization computer that will work on a Problem.
@@ -29,7 +27,7 @@ class Metaheuristic(object):
         """Compute to find the best solution of the problem.
 
         Yield:
-            IterStat: statistic of the current iteration.
+            Solution: Best solution for the current iteration.
 
         """
         raise NotImplementedError('Abstract Class')
@@ -45,12 +43,10 @@ class SMetaheuristic(Metaheuristic):
 
     def run(self):
         self.solution = self._get_initial_solution()
-        iter_num = 0
         while not self._stopping_criterion():
             candidates = self._get_candidates()
             self.solution = self._select_solution(candidates)
-            yield IterStat(iter_num, best=self.solution.fitness)
-            iter_num += 1
+            yield self.solution
 
     def _get_initial_solution(self):
         """Fetch the starting solution.
