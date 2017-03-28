@@ -8,7 +8,7 @@ problems.
 """
 
 
-class Parameter(object):
+class ParameterDesc(object):
     """Description of a parameter.
 
     Args:
@@ -28,10 +28,15 @@ class Parameter(object):
         self.default = default
 
     def check_value(self, value):
+        """Check that a value can be the parameter.
+
+        Should be implemented in sub-class.
+
+        """
         raise NotImplementedError("Abstract Class")
 
 
-class ParameterInt(Parameter):
+class ParameterDescInt(ParameterDesc):
     """Description of an integer parameter.
 
     Args:
@@ -53,6 +58,13 @@ class ParameterInt(Parameter):
         self.max_val = max_val
 
     def check_value(self, value):
+        """Check that a value can be an int parameter.
+
+        Raises:
+            TypeError: If the value is not an int.
+            ValueError: If it does not respect the constraints.
+
+        """
         if not isinstance(value, int):
             raise TypeError("The value for the parameter {} should be an "
                             "integer ({} instead)".format(self.name,
@@ -73,13 +85,35 @@ class ParameterInt(Parameter):
                                                value))
 
 
-class ParameterFloat(Parameter):
+class ParameterDescFloat(ParameterDesc):
+    """Description of a float parameter.
+
+    Args:
+        min_val (float): Minimum value that can be taken by the parameter. If
+            None, there is no minimum value.
+        max_val (float): Maximum value that can be taken by the parameter. If
+            None, there is no maximum value.
+
+    Attributes:
+        min_val (float): Minimum value that can be taken by the parameter. If
+            None, there is no minimum value.
+        max_val (float): Maximum value that can be taken by the parameter. If
+            None, there is no maximum value.
+
+    """
     def __init__(self, name, description, min_val, max_val, default):
         super().__init__(name, description, default)
         self.min_val = min_val
         self.max_val = max_val
 
     def check_value(self, value):
+        """Check that a value can be a float parameter.
+
+        Raises:
+            TypeError: If the value is not a float.
+            ValueError: If it does not respect the constraints.
+
+        """
         if not isinstance(value, float):
             raise TypeError("The value for the parameter {} should be an "
                             "float ({} instead)".format(self.name,
@@ -100,23 +134,47 @@ class ParameterFloat(Parameter):
                                                value))
 
 
-class ParameterStr(Parameter):
+class ParameterDescStr(ParameterDesc):
+    """Description of a string parameter."""
     def __init__(self, name, description, default):
         super().__init__(name, description, default)
 
     def check_value(self, value):
+        """Check that a value can be a string parameter.
+
+        Raises:
+            TypeError: If the value is not a string.
+
+        """
         if not isinstance(value, str):
             raise TypeError("The value for the parameter {} should be an "
                             "string ({} instead)".format(self.name,
                                                          value.__class__))
 
 
-class ParameterEnum(Parameter):
+class ParameterDescEnum(ParameterDesc):
+    """Description of an enumerated parameter.
+
+    Args:
+        allowed_val (list): Of anything. It describes the list of values that
+            can be taken by the parameter.
+
+    Attributes:
+        allowed_val (list): Of anything. It describes the list of values that
+            can be taken by the parameter.
+
+    """
     def __init__(self, name, description, allowed_val, default):
         super().__init__(name, description, default)
         self.allowed_val = allowed_val
 
     def check_value(self, value):
+        """Check that a value can be a enum parameter.
+
+        Raises:
+            ValueError: If the value is not one of the allowed values.
+
+        """
         if value not in self.allowed_val:
             raise ValueError("The value for the parameter {} should be one of "
                              "the allowed values ({}). ({} "
@@ -126,40 +184,88 @@ class ParameterEnum(Parameter):
 
 
 class Parameters(object):
+    """Hold a list of parameters.
+
+    Parameters are a list of attributes values, indexed by the name given to
+    each parameter description in the __parameters attribute (which should be
+    given for each sub-class).
+
+    Parameter values can be fetched by attribute getting.
+
+    Example:
+        >>> p = Parameters(attr_int=4, attr_float=None)
+        >>> p.attr_int
+        4
+        >>> p.attr_float
+        0.0
+        >>> p.attr_str
+        'default_value'
+        >>> p.attr_enum
+        0
+
+
+    Args:
+        kwargs (dict): Key-values pair of parameters. The keys must follow the
+            names given to the parameters descriptions. If a parameter is not
+            given, the default value set in the parameter description will be
+            used. If the value of a parameter is set to None, again the default
+            value of the parameter description will be used.
+
+    """
+    # This attribute must be modified for the parameters sub-classes.
     __parameters = [
-        ParameterInt('attr_int',
-                     'An integer attribute',
-                     0,
-                     None,
-                     15),
-        ParameterFloat('attr_float',
-                       'A float attribute',
-                       -100.0,
-                       100.0,
-                       0.0),
-        ParameterStr('attr_str',
-                     'A string attribute',
-                     'default_value'),
-        ParameterEnum('attr_enum',
-                      'An enum attribute',
-                      ['A', 0, object, None],
-                      0)
+        ParameterDescInt('attr_int',
+                         'An integer attribute',
+                         0,
+                         None,
+                         15),
+        ParameterDescFloat('attr_float',
+                           'A float attribute',
+                           -100.0,
+                           100.0,
+                           0.0),
+        ParameterDescStr('attr_str',
+                         'A string attribute',
+                         'default_value'),
+        ParameterDescEnum('attr_enum',
+                          'An enum attribute',
+                          ['A', 0, object, None],
+                          0)
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         self._values = {}
-        for i, value in enumerate(args):
-            self.__parameters[i].check_value(value)
-            self._values[self.__parameters[i].name] = value
+
+        dict_params = {param_desc.name: param_desc for param_desc in
+                       self.__parameters}
 
         for key, value in kwargs.items():
-            self._values[key] = value
+            if key in dict_params:
+                parameter_desc = dict_params[key]
+                if value is not None:
+                    parameter_desc.check_value(value)
+                    self._values[key] = value
+                else:
+                    self._values[key] = parameter_desc.default
+            else:
+                raise TypeError("'{}' is an invalid keyword for these "
+                                "parameters".format(key))
 
-        for parameter in self.__parameters:
-            if parameter.name not in self._values:
-                self._values[parameter.name] = parameter.default
+        for parameter_desc in self.__parameters:
+            if parameter_desc.name not in self._values:
+                self._values[parameter_desc.name] = parameter_desc.default
 
-    def __getitem__(self, key):
+    def __getattr__(self, key):
         if key not in self._values:
             raise AttributeError('No parameter is named {}'.format(key))
         return self._values[key]
+
+    @classmethod
+    def get_parameters_description(cls):
+        """Getter for the list of parameters descriptions.
+
+        Returns:
+            list: of ParameterDesc.
+
+        """
+        return cls.__parameters

@@ -166,3 +166,17 @@ def list_records(binary_encoding):
 @pytest.fixture
 def list_time_tot():
     return [i for i in range(NB_RUNS)]
+
+
+@pytest.fixture
+def param_creation_some():
+    return {'attr_int': 25,
+            'attr_enum': 'A'}
+
+
+@pytest.fixture
+def param_creation_all():
+    return {'attr_int': 25,
+            'attr_float': 2.0,
+            'attr_str': 'Test String',
+            'attr_enum': 'A'}

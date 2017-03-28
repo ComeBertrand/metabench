@@ -66,6 +66,7 @@ __version__ = '0.0.1'
 
 from metabench.benchmark import *
 from metabench.draw import *
+from metabench.parameters import *
 from metabench.statistics import *
 
 from metabench.prob.solution import *

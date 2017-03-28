@@ -7,6 +7,7 @@ to evaluate the performance of metaheuristics on several types of problems.
 
 [![Build Status](https://travis-ci.org/ComeBertrand/metabench.svg?branch=master)](https://travis-ci.org/ComeBertrand/metabench)
 [![Coverage Status](https://coveralls.io/repos/github/ComeBertrand/metabench/badge.svg?branch=master)](https://coveralls.io/github/ComeBertrand/metabench?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8fb2b18cc20346cb9ad4bff00e945ad8)](https://www.codacy.com/app/ComeBertrand/metabench?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ComeBertrand/metabench&amp;utm_campaign=Badge_Grade)
 
 
 
