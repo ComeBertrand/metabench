@@ -43,12 +43,12 @@ class Benchmark(object):
     def run(self):
         """Compute the Benchmark."""
         self._results = []
-        for i, prob in enumerate(self._problems):
-            for j, meta in enumerate(self._metaheuristics):
+        for i in range(len(self._problems)):
+            for j in range(len(self._metaheuristics)):
                 self._results.append((i, j, Statistics(self._nb_runs)))
 
-        for i in range(len(self._results)):
-            self._compute(i)
+        for k in range(len(self._results)):
+            self._compute(k)
 
     def _compute(self, index):
         index_prob, index_meta, stats = self._results[index]
@@ -62,6 +62,10 @@ class Benchmark(object):
         meta_class, meta_attributes, meta_key_attributes = meta
 
         for i in range(self._nb_runs):
+            print("> Meta [{}] - Prob [{}] - Run num "
+                  "{:d}".format(meta_class.__name__,
+                                prob_class.__name__,
+                                i))
             metaheuristic = meta_class(problem,
                                        *meta_attributes,
                                        **meta_key_attributes)

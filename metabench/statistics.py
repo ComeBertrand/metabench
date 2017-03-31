@@ -92,7 +92,8 @@ class Statistics(object):
             self._values.resize((self._nb_run, self._current_size_value))
 
         if self._nb_iter_tot >= self._current_size_time:
-            self._time.resize((1, self._current_size_time))
+            self._current_size_time *= 2
+            self._time.resize((self._current_size_time,))
 
         self._values[num_run][self._nb_iter[num_run]] = best_solution.fitness
         self._time[self._nb_iter_tot] = time_iteration
