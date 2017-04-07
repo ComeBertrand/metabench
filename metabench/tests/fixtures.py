@@ -10,6 +10,9 @@ MAX_VAL_INT = 4
 MIN_VAL_FLO = 0.0
 MAX_VAL_FLO = 4.0
 
+MIN_VAL_FLO_LMV = 0.001
+MAX_VAL_FLO_LMV = 10.0
+
 VALUE_NOT_RETURNED = 0
 VALUE_RETURNED_FIT = 1
 VALUE_RETURNED_FIT_PART = 2
@@ -20,7 +23,7 @@ STEP = 0.04
 NB_RUNS = 3
 NB_RUNS_FALSE = -3
 NB_ITER = 10
-BASE_SIZE = 256
+BASE_SIZE = 3
 BASE_SIZE_FALSE = -256
 
 
@@ -180,3 +183,23 @@ def param_creation_all():
             'attr_float': 2.0,
             'attr_str': 'Test String',
             'attr_enum': 'A'}
+
+
+@pytest.fixture
+def continuous_move_range():
+    return mb.ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_FLO)
+
+
+@pytest.fixture
+def continuous_log_move_range():
+    return mb.ContinuousLogMoveRange(MIN_VAL_FLO_LMV, MAX_VAL_FLO_LMV)
+
+
+@pytest.fixture
+def discrete_move_range():
+    return mb.DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_INT)
+
+
+@pytest.fixture
+def discrete_log_move_range():
+    return mb.DiscreteLogMoveRange(MIN_VAL_INT, MAX_VAL_INT)

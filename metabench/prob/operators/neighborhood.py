@@ -5,6 +5,7 @@ Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
 Description: Operators that create neighbors for a solution.
 """
+
 from itertools import combinations, product
 
 import numpy as np

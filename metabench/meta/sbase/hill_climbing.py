@@ -12,13 +12,19 @@ from metabench.meta.metaheuristic import SMetaheuristic
 class HillClimbing(SMetaheuristic):
     """Hill Climbing metaheuristic.
 
+    Args:
+        base_step (float): Base step used for the descent. Must be between
+            0.0 and 1.0. Default is 0.1 (which represent a slow descent).
+
     Attributes:
         previous_fitness (float): Best fitness of the previous iteration.
+        base_step (float): Base step used for the descent.
 
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, problem, base_step=0.1):
+        super().__init__(problem)
         self.previous_fitness = None
+        self.base_step = base_step
 
     def _get_initial_solution(self):
         solution = self.problem.generate_solution()
@@ -26,7 +32,9 @@ class HillClimbing(SMetaheuristic):
         return solution
 
     def _get_candidates(self):
-        candidates = [(n, m) for n, m in self.problem.get_neighbors(self.solution)]
+        candidates = [(n, m) for n, m in
+                self.problem.get_neighbors(self.solution,
+                                           self.base_step)]
         return candidates
 
     def _select_solution(self, candidates):

@@ -61,12 +61,14 @@ class Problem(object):
         """
         return self.encoding.generate_random_solution()
 
-    def get_neighbors(self, solution):
+    def get_neighbors(self, solution, step):
         """Generate the neighbors of a given solution.
 
         Args:
             solution (Solution): solution for which we want to create
                 neighbors.
+            step (float): Normalized step given by the metaheuristic. Strictly
+                between 0.0 and 1.0.
 
         Yield:
             Solution: the neighboring solutions.
@@ -79,7 +81,7 @@ class Problem(object):
 
         """
         if self.neighborhood is not None:
-            for neighbor, modifs in self.neighborhood(solution):
+            for neighbor, modifs in self.neighborhood(solution, step):
                 yield neighbor, modifs
         else:
             raise NotImplementedError('No neighborhood operator is implemented'

@@ -16,19 +16,26 @@ from metabench.prob.problem import Problem
 from metabench.prob.encoding import RealEncoding, Boundaries
 from metabench.prob.objective import Objective
 from metabench.prob.operators.neighborhood import Neighborhood, \
-        move_distance_continuous
+        move_distance_continuous, ContinuousLogMoveRange
 
 
 class ContinuousProblem(Problem):
-    """
+    """Problems that are defined by a continuous function.
+
+    Args:
+        n_dim (int): Number of dimensions.
+        min_vals (np.array): Minimum values for each dimension.
+        max_vals (np.array): Maximum values for each dimension.
+        move_range (MoveRange): Range of the move step.
+        known_min (float): Minimum of the continuous function. None means that
+            the minimum is not known.
 
     """
-    def __init__(self, n_dim, min_vals, max_vals, step, known_min):
+    def __init__(self, n_dim, min_vals, max_vals, move_range, known_min):
         nb_neighbors = n_dim * 100
-        move = partial(move_distance_continuous,
-                       step=step,
-                       nb_neighbors=nb_neighbors)
-        neighborhood = Neighborhood(move)
+        neighborhood = Neighborhood(move_distance_continuous,
+                                    move_range,
+                                    nb_neighbors)
         boundaries = Boundaries(min_vals,
                                 max_vals,
                                 np.float)
@@ -40,7 +47,7 @@ class ContinuousProblem(Problem):
                          known_min=known_min)
 
     def _eval_func(self, solution):
-        """Actual evaluation of a solution.
+        """Actual evaluation of a solution by the continuous function.
 
         Args:
             solution (Solution): Solution to be evaluated.
@@ -65,11 +72,11 @@ class Ackleys(ContinuousProblem):
 
     """
     def __init__(self, n_dim):
-        min_val = np.array([-32.768] * n_dim, np.float)
-        max_val = np.array([32.768] * n_dim, np.float)
-        step = 0.1
+        min_vals = np.array([-32.768] * n_dim, np.float)
+        max_vals = np.array([32.768] * n_dim, np.float)
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -84,9 +91,9 @@ class Bukin6(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-15.0, -3.0], np.float)
         max_vals = np.array([-5.0, 3.0], np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         part1 = np.abs(solution[1] - 0.01 * solution[0] * solution[0])
@@ -100,9 +107,9 @@ class CrossInTray(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-10.0, -10.0], np.float)
         max_vals = np.array([10.0, 10.0], np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = -2.06261
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         part1 = np.abs(100 - np.sqrt(np.sum(solution * solution)) / np.pi)
@@ -117,9 +124,9 @@ class DropWave(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-5.12, -5.12], np.float)
         max_vals = np.array([5.12, 5.12], np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = -1.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         sum_sol_sq = np.sum(solution * solution)
@@ -134,9 +141,9 @@ class Eggholder(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-512, -512], np.float)
         max_vals = np.array([512, 512], np.float)
-        step = 1.0
+        move_range = ContinuousLogMoveRange(0.01, 10.0)
         known_min = -959.6407
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         part1 = np.sin(np.sqrt(np.abs(solution[1] + (solution[0]/2.) + 47)))
@@ -150,9 +157,9 @@ class GramacyLee(ContinuousProblem):
         n_dim = 1
         min_vals = np.array([0.5], np.float)
         max_vals = np.array([2.5], np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         part1 = np.sin(10 * np.pi * solution[0]) / (2 * solution[0])
@@ -170,9 +177,9 @@ class Griewank(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-600] * n_dim, np.float)
         max_vals = np.array([600] * n_dim, np.float)
-        step = 1.0
+        move_range = ContinuousLogMoveRange(0.01, 10.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         part1 = np.sum((solution * solution) / 4000.0)
@@ -187,9 +194,9 @@ class HolderTable(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-10.0, -10.0], np.float)
         max_vals = np.array([10.0, 10.0], np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = -19.2085
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         sum_sqrt_sq = np.sqrt(np.sum(solution * solution))
@@ -204,9 +211,9 @@ class Langermann(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([0.0] * n_dim, np.float)
         max_vals = np.array([10.0] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         m = 5
@@ -233,9 +240,9 @@ class Levy(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-10] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         w = 1.0 + (solution - 1.0) / 4.0
@@ -254,9 +261,9 @@ class Levy13(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-10.0] * n_dim, np.float)
         max_vals = np.array([10.0] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -277,9 +284,9 @@ class Rastrigin(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-5.12] * n_dim, np.float)
         max_vals = np.array([5.12] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         A = 10
@@ -295,9 +302,9 @@ class Schaffer2(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-100.0] * n_dim, np.float)
         max_vals = np.array([100.0] * n_dim, np.float)
-        step = 1.
+        move_range = ContinuousLogMoveRange(0.01, 10.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -313,9 +320,9 @@ class Schaffer4(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-100.0] * n_dim, np.float)
         max_vals = np.array([100.0] * n_dim, np.float)
-        step = 1.
+        move_range = ContinuousLogMoveRange(0.01, 10.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -335,9 +342,9 @@ class Schwefel(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-500] * n_dim, np.float)
         max_vals = np.array([500] * n_dim, np.float)
-        step = 1.
+        move_range = ContinuousLogMoveRange(0.01, 20.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         A = 418.9829
@@ -352,9 +359,9 @@ class Shubert(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-5.12] * n_dim, np.float)
         max_vals = np.array([5.12] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = -186.7309
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         A = np.array(range(1, 6), np.float)
@@ -386,9 +393,9 @@ class Bohachevsky(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-100] * n_dim, np.float)
         max_vals = np.array([100] * n_dim, np.float)
-        step = 1.0
+        move_range = ContinuousLogMoveRange(0.01, 10.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         if self.num_func == 1:
@@ -435,9 +442,9 @@ class Perm0(ContinuousProblem):
         self.beta = beta
         min_vals = np.array([-1 * n_dim] * n_dim, np.float)
         max_vals = np.array([n_dim] * n_dim, np.float)
-        step = n_dim / 100.
+        move_range = ContinuousLogMoveRange(0.01, n_dim/10.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -461,16 +468,17 @@ class RotatedHyperEllipsoid(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-65.536] * n_dim, np.float)
         max_vals = np.array([65.536] * n_dim, np.float)
-        step = 0.5
+        move_range = ContinuousLogMoveRange(0.01, 10.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
         s_mat = np.zeros((n, n), np.float)
-        prod = solution * solution
+        solsq = solution * solution
+        prod = solsq.copy()
         for i in range(n):
-            l = prod[:i+1].copy()
+            l = np.array(prod[:i+1].copy())
             l.resize((n,))
             s_mat[i] += l
         return np.sum(s_mat)
@@ -486,9 +494,9 @@ class Sphere(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-5.12] * n_dim, np.float)
         max_vals = np.array([5.12] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         return np.sum(solution * solution)
@@ -504,9 +512,9 @@ class SumDiffPower(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-1] * n_dim, np.float)
         max_vals = np.array([1] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.001, 0.1)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -524,9 +532,9 @@ class SumSquare(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-10] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -547,17 +555,17 @@ class Trid(ContinuousProblem):
         dimsq = n_dim * n_dim
         min_vals = np.array([dimsq] * n_dim, np.float)
         max_vals = np.array([dimsq] * n_dim, np.float)
-        step = dimsq / 100.
+        move_range = ContinuousLogMoveRange(0.01, dimsq/10.)
         if n_dim == 6:
             known_min = -50.
         elif n_dim == 10:
             known_min = -200.
         else:
             known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
-        part1 = np.sum(np.power(solution - 1), 2)
+        part1 = np.sum(np.power(solution - 1, 2))
         part2 = np.sum(solution[1:] * solution[:-1])
         return part1 - part2
 
@@ -573,9 +581,9 @@ class Booth(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-10] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -591,9 +599,9 @@ class Matyas(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-10] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -609,9 +617,9 @@ class McCormick(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-1.5, 3.0], np.float)
         max_vals = np.array([4.0, 4.0], np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = -1.9133
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -623,13 +631,14 @@ class McCormick(ContinuousProblem):
 
 class PowerSum(ContinuousProblem):
     """Power Sum function."""
-    def __init__(self, n_dim):
+    def __init__(self):
         n_dim = 4
         min_vals = np.array([0] * n_dim, np.float)
         max_vals = np.array([n_dim] * n_dim, np.float)
-        step = n_dim / 100.
+        step = n_dim / 10.
+        move_range = ContinuousLogMoveRange(0.01, step)
         known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         b = np.array([8, 18, 44, 114], np.float)
@@ -638,7 +647,7 @@ class PowerSum(ContinuousProblem):
         i = np.array(range(1, n+1), np.float)
         prod = np.power(solution, i)
         for i in range(n):
-            l = prod[:i+1].copy()
+            l = np.array(prod[:i+1].copy())
             l.resize((n,))
             s_mat[i] += l
         return np.sum(np.power(np.sum(s_mat, axis=1) - b, 2))
@@ -654,13 +663,13 @@ class Zakharov(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-5] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
-        i = np.array(range(1, n), np.float)
+        i = np.array(range(1, n+1), np.float)
         part1 = np.sum(np.power(solution, 2))
         part2 = np.power(np.sum(0.5 * i * solution), 2)
         part3 = np.power(np.sum(0.5 * i * solution), 4)
@@ -678,9 +687,9 @@ class ThreeHumpCamel(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-5.0] * n_dim, np.float)
         max_vals = np.array([5.0] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -698,10 +707,10 @@ class SixHumpCamel(ContinuousProblem):
     def __init__(self):
         n_dim = 2
         min_vals = np.array([-3.0, -2.0], np.float)
-        max_vals = np.array([3.0, 2.0] * n_dim, np.float)
-        step = 0.1
+        max_vals = np.array([3.0, 2.0], np.float)
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = -1.0316
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -723,11 +732,12 @@ class DixonPrice(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-10.0] * n_dim, np.float)
         max_vals = np.array([10.0] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
+        n = len(solution)
         x1 = solution[0]
         s1 = solution[1:]
         s2 = solution[:-1]
@@ -747,9 +757,9 @@ class Rosenbrock(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-5.0] * n_dim, np.float)
         max_vals = np.array([10.0] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         s1 = solution[1:]
@@ -770,9 +780,9 @@ class DeJong5(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-65.536] * n_dim, np.float)
         max_vals = np.array([65.536] * n_dim, np.float)
-        step = 0.5
+        move_range = ContinuousLogMoveRange(0.01, 5.)
         known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         A = np.array([[-32, -16, 0, 16, 32] * 5,
@@ -791,9 +801,9 @@ class Easom(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-100] * n_dim, np.float)
         max_vals = np.array([100] * n_dim, np.float)
-        step = 0.5
+        move_range = ContinuousLogMoveRange(0.01, 10.)
         known_min = -1.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -813,7 +823,7 @@ class Michalewicz(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([0.0] * n_dim, np.float)
         max_vals = np.array([np.pi] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         if n_dim == 2:
             known_min = -1.8013
         elif n_dim == 5:
@@ -822,7 +832,7 @@ class Michalewicz(ContinuousProblem):
             known_min = -9.66015
         else:
             known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -844,9 +854,9 @@ class Beale(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-4.5] * n_dim, np.float)
         max_vals = np.array([4.5] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -863,9 +873,9 @@ class Branin(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-4.5] * n_dim, np.float)
         max_vals = np.array([4.5] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         a = 1.0
@@ -887,9 +897,9 @@ class Colville(ContinuousProblem):
         n_dim = 4
         min_vals = np.array([-10] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x1 = solution[0]
@@ -911,9 +921,9 @@ class Forrester(ContinuousProblem):
         n_dim = 1
         min_vals = np.array([0] * n_dim, np.float)
         max_vals = np.array([1] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         known_min = None
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         x = solution[0]
@@ -935,12 +945,12 @@ class GoldsteinPrice(ContinuousProblem):
         n_dim = 2
         min_vals = np.array([-2] * n_dim, np.float)
         max_vals = np.array([2] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         if self.rescaled_form:
             known_min = None
         else:
             known_min = 3.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         if self.rescaled_form:
@@ -969,9 +979,9 @@ class Hartmann3D(ContinuousProblem):
         n_dim = 3
         min_vals = np.array([0] * n_dim, np.float)
         max_vals = np.array([1] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         known_min = -3.86278
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         alpha = np.array([1.0, 1.2, 3.0, 3.2], np.float)
@@ -996,16 +1006,16 @@ class Hartmann6D(ContinuousProblem):
 
     """
     def __init__(self, rescaled_form=False):
-        rescaled_form = rescaled_form
+        self.rescaled_form = rescaled_form
         n_dim = 6
         min_vals = np.array([0] * n_dim, np.float)
         max_vals = np.array([1] * n_dim, np.float)
-        step = 0.01
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         if self.rescaled_form:
             known_min = None
         else:
             known_min = -3.32237
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         alpha = np.array([1.0, 1.2, 3.0, 3.2], np.float)
@@ -1036,9 +1046,9 @@ class Perm(ContinuousProblem):
         self.beta = beta
         min_vals = np.array([-1 * n_dim] * n_dim, np.float)
         max_vals = np.array([n_dim] * n_dim, np.float)
-        step = n_dim / 100.
+        move_range = ContinuousLogMoveRange(0.01, n_dim/10.)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
@@ -1067,9 +1077,9 @@ class Powell(ContinuousProblem):
                              "multiple of 4")
         min_vals = np.array([-4] * n_dim, np.float)
         max_vals = np.array([5] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 0.1)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution) // 4
@@ -1094,9 +1104,9 @@ class Shekel(ContinuousProblem):
         n_dim = 4
         min_vals = np.array([0] * n_dim, np.float)
         max_vals = np.array([10] * n_dim, np.float)
-        step = 0.1
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = -10.5364
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         m = 10
@@ -1125,9 +1135,9 @@ class StyblinskiTang(ContinuousProblem):
     def __init__(self, n_dim):
         min_vals = np.array([-5] * n_dim, np.float)
         max_vals = np.array([5] * n_dim, np.float)
-        step = 0.05
+        move_range = ContinuousLogMoveRange(0.01, 1.0)
         known_min = 0.0
-        super().__init__(n_dim, min_vals, max_vals, step, known_min)
+        super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
         n = len(solution)
