@@ -235,3 +235,20 @@ def test_hartmann6d():
 def test_perm():
     cp = mb.prob.Perm(10, 0.7)
     _perform_continuous_problem_test(cp)
+
+
+def test_powell():
+    cp = mb.prob.Powell(12)
+    _perform_continuous_problem_test(cp)
+    with pytest.raises(ValueError):
+        mb.prob.Powell(10)
+
+
+def test_shekel():
+    cp = mb.prob.Shekel()
+    _perform_continuous_problem_test(cp)
+
+
+def test_styblinski_tang():
+    cp = mb.prob.StyblinskiTang(10)
+    _perform_continuous_problem_test(cp)
