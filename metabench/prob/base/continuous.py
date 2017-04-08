@@ -8,8 +8,6 @@ metaheuristics. All theses functions were taken from the following website :
 https://www.sfu.ca/~ssurjano/optimization.html
 """
 
-from functools import partial
-
 import numpy as np
 
 from metabench.prob.problem import Problem
@@ -216,7 +214,6 @@ class Langermann(ContinuousProblem):
         super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
-        m = 5
         A = np.array([[3, 5],
                       [5, 2],
                       [2, 1],
@@ -249,9 +246,9 @@ class Levy(ContinuousProblem):
         part_w = w[:-1]
         part1 = np.power(np.sin(np.pi * w[0]), 2)
         part2 = np.sum((part_w - 1) * (part_w - 1) *
-                (1 + 10 * np.power(np.sin(np.pi * part_w + 1), 2)))
-        part3 = (w[-1] - 1) * (w[-1] - 1) * (1 +
-                np.power(np.sin(2 * np.pi * w[-1]), 2))
+                       (1 + 10 * np.power(np.sin(np.pi * part_w + 1), 2)))
+        part3 = ((w[-1] - 1) * (w[-1] - 1) * (1 + np.power(np.sin(2 * np.pi *
+                                                                  w[-1]), 2)))
         return part1 + part2 + part3
 
 
@@ -791,7 +788,8 @@ class DeJong5(ContinuousProblem):
         x1 = solution[0]
         x2 = solution[1]
         i = np.array(range(1, 26), np.float)
-        part1 = np.sum(np.power(i + np.power(x1 -1.0 * A[0], 6) + np.power(x2 -1.0 * A[1], 6), -1))
+        part1 = np.sum(np.power(i + np.power(x1 - A[0], 6) +
+                                np.power(x2 - A[1], 6), -1))
         return np.power(0.002 + part1, -1)
 
 
@@ -863,7 +861,7 @@ class Beale(ContinuousProblem):
         x2 = solution[1]
         part1 = np.power(1.5 - x1 + x1 * x2, 2)
         part2 = np.power(2.25 - x1 + x1 * x2 * x2, 2)
-        part3 = np.power(2.625  - x1 + x1 * x2 * x2 * x2, 2)
+        part3 = np.power(2.625 - x1 + x1 * x2 * x2 * x2, 2)
         return part1 + part2 + part3
 
 
@@ -968,8 +966,11 @@ class GoldsteinPrice(ContinuousProblem):
         x1_2 = x1 * x1
         x2 = solution[1]
         x2_2 = x2 * x2
-        part1 = 1 + np.power(x1 + x2 + 1, 2) * (19 - 14 * x1 + 3 * x1_2 - 14 * x2 + 6 * x1 * x2 + 3 * x2_2)
-        part2 = 30 + np.power(2 * x1 - 3 * x2, 2) * (18 - 32 * x1 + 12 * x1_2 + 48 * x2 - 36 * x1 * x2 + 27 * x2_2)
+        part1 = (1 + np.power(x1 + x2 + 1, 2) * (19 - 14 * x1 + 3 * x1_2 - 14 *
+                                                 x2 + 6 * x1 * x2 + 3 * x2_2))
+        part2 = (30 + np.power(2 * x1 - 3 * x2, 2) * (18 - 32 * x1 + 12 * x1_2
+                                                      + 48 * x2 - 36 * x1 * x2
+                                                      + 27 * x2_2))
         return part1 * part2
 
 
@@ -992,7 +993,7 @@ class Hartmann3D(ContinuousProblem):
         P = 0.0001 * np.array([[3689, 1170, 2673],
                                [4699, 4387, 7470],
                                [1091, 8732, 5547],
-                               [ 381, 5743, 8828]], np.float)
+                               [381, 5743, 8828]], np.float)
         part1 = -1 * np.sum(A + np.power(solution - P, 2), axis=1)
         return (-1 * np.sum(alpha * np.exp(part1)))
 
@@ -1140,7 +1141,6 @@ class StyblinskiTang(ContinuousProblem):
         super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
-        n = len(solution)
         s_4 = np.power(solution, 4)
         s_2 = np.power(solution, 2)
         return (1/2) * np.sum(s_4 - 16 * s_2 + 5 * solution)
