@@ -58,7 +58,7 @@ class MoveRange(object):
             ValueError: If the given step is not in the range [0.0, 1.0].
 
         """
-        if type(step) is not float:
+        if not isinstance(step, float):
             raise TypeError("A MoveRange can only convert a normalized step "
                             "of type float")
         if step > 1. or step < 0.:
@@ -101,9 +101,9 @@ class ContinuousMoveRange(MoveRange):
         if high < low:
             raise ValueError("High value for move range must be superior or "
                              "equal to the low value")
-        if type(low) is not float:
+        if not isinstance(low, float):
             raise TypeError("Low bound of ContinuousMoveRange must be a float")
-        if type(high) is not float:
+        if not isinstance(high, float):
             raise TypeError("High bound of ContinuousMoveRange must be a "
                             "float")
 
@@ -179,9 +179,9 @@ class DiscreteMoveRange(MoveRange):
         if high < low:
             raise ValueError("High value for move range must be superior or "
                              "equal to the low value")
-        if type(low) is not int:
+        if not isinstance(low, int):
             raise TypeError("Low bound of DiscreteMoveRange must be an int")
-        if type(high) is not int:
+        if not isinstance(high, int):
             raise TypeError("High bound of DiscreteMoveRange must be an int")
         self.values = [x for x in range(low, high + 1)]
         self.nb_values = high - low + 1
@@ -274,7 +274,9 @@ class Neighborhood(object):
 
         """
         converted_step = self.move_range.convert(step)
-        for neighbor, modifs in self.move(solution, converted_step, self.max_nb_neighbors):
+        for neighbor, modifs in self.move(solution,
+                                          converted_step,
+                                          self.max_nb_neighbors):
             yield neighbor, modifs
 
 
@@ -365,7 +367,7 @@ def move_substitution(solution, step, nb_neighbors):
 
     """
     all_possibilities = []
-    for i in range(len(solution)):
+    for i, _ in enumerate(solution):
         allowed_values = set(range(solution.min_val(i),
                                    solution.max_val(i) + 1))
         allowed_values.remove(solution[i])
@@ -426,7 +428,8 @@ def move_swap(solution, step, nb_neighbors):
 
     list_swaps = []
     for comb in list_comb:
-        product_result = filter(_test_swap_unicity, [x for x in product(*comb)])
+        product_result = filter(_test_swap_unicity, [x for x in
+                                                     product(*comb)])
         list_swaps += product_result
     np.random.shuffle(list_swaps)
 
