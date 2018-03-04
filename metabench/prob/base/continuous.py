@@ -13,8 +13,9 @@ import numpy as np
 from metabench.prob.problem import Problem
 from metabench.prob.encoding import RealEncoding, Boundaries
 from metabench.prob.objective import Objective
-from metabench.prob.operators.neighborhood import Neighborhood, \
-        move_distance_continuous, ContinuousLogMoveRange
+from metabench.prob.operators.neighborhood import (Neighborhood,
+                                                   move_distance_continuous,
+                                                   ContinuousLogMoveRange)
 
 
 class ContinuousProblem(Problem):

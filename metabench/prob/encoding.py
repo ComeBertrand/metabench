@@ -110,7 +110,7 @@ class Encoding(object):
     candidate solutions.
 
     The role of an encoding is to keep information about the space on which
-    the solution can be create and the constraint on it.
+    the solution can be created and the constraint that apply on it.
 
     It is also used to compute statistics on the solution space.
 

@@ -22,7 +22,7 @@ class Problem(object):
             find neighboring candidate solutions for a given solution. Default
             is None.
         known_min (float): Known minimum of the fitness for the problem. If it
-            is not know, set to None. Default is None.
+            is not known, set to None. Default is None.
 
     Attributes:
         objective (Objective): The objective (or fitness) function to optimize.

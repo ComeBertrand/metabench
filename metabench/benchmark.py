@@ -69,8 +69,7 @@ class Benchmark(object):
             metaheuristic = meta_class(problem,
                                        *meta_attributes,
                                        **meta_key_attributes)
-            t_run = clock()
-            t_iter = clock()
+            t_run = t_iter = clock()
             for solution in metaheuristic.run():
                 diff_t_iter = clock() - t_iter
                 stats.record_iter_stat(i, solution, diff_t_iter)

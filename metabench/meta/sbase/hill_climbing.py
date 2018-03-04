@@ -33,8 +33,8 @@ class HillClimbing(SMetaheuristic):
 
     def _get_candidates(self):
         candidates = [(n, m) for n, m in
-                self.problem.get_neighbors(self.solution,
-                                           self.base_step)]
+                      self.problem.get_neighbors(self.solution,
+                                                 self.base_step)]
         return candidates
 
     def _select_solution(self, candidates):

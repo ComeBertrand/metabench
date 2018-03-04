@@ -103,7 +103,7 @@ class Objective(object):
             return self.fitness(solution)
 
 
-class ObjectiveNoisy(object):
+class ObjectiveNoisy(Objective):
     """TODO"""
     def __init__(self, fitness, std, fitness_partial=None):
         super().__init__(fitness, fitness_partial)

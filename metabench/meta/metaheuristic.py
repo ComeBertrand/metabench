@@ -37,7 +37,7 @@ class SMetaheuristic(Metaheuristic):
     """Solution based metaheuristic.
 
     Solution based metaheuristics iterate to improve a single solution by
-    trying to improve it by replacing it by its neighbors.
+    trying to improve it by replacing it by its one its neighbors.
 
     """
 

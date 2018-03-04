@@ -36,18 +36,40 @@ class Solution(np.ndarray):
 
     @property
     def encoding(self):
+        """Getter for the encoding of the solution.
+
+        Returns:
+            Encoding
+        """
         return self._encoding
 
     @encoding.setter
     def encoding(self, encoding):
+        """Setter for the encoding of the solution.
+
+        Args:
+            encoding (Encoding): The new encoding of the solution.
+
+        """
         self._encoding = encoding
 
     @property
     def fitness(self):
+        """Getter for the fitness of the solution.
+
+        Returns:
+            float
+        """
         return self._fitness
 
     @fitness.setter
     def fitness(self, fitness):
+        """Setter for the fitness of the solution.
+
+        Args:
+            fitness (float): The new fitness of the solution.
+
+        """
         self._fitness = fitness
 
     def copy(self, copy_fitness=False):
@@ -63,12 +85,13 @@ class Solution(np.ndarray):
             Solution: a copy of itself.
 
         """
+        fitness = None
         if copy_fitness:
-            return Solution(super().copy(),
-                            self.encoding,
-                            self.fitness)
+            fitness = self.fitness
+
         return Solution(super().copy(),
-                        self.encoding)
+                        self.encoding,
+                        fitness)
 
     def max_val(self, index):
         """Find the maximum value that can be taken on a particular index.

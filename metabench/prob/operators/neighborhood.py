@@ -190,6 +190,10 @@ class DiscreteMoveRange(MoveRange):
         """Linearily convert a normalized step to its discrete value."""
         self._check_step(step)
         float_value = self.nb_values * step
+        # TODO: using floor might be a bad idea. In the case the range min and
+        # max values are next to each other, it will only take the second value
+        # if the step is 1.0 (while it should probably take it once you are
+        # above 0.5).
         index = min(int(np.floor(float_value)), self.nb_values - 1)
         return self.values[index]
 
@@ -274,6 +278,10 @@ class Neighborhood(object):
 
         """
         converted_step = self.move_range.convert(step)
+        # TODO: remove the nb_neighbors from the move functions. Moves shall
+        # be atomic and just make a modification on a solution and return a
+        # neighbor and a modification. They shall probably have a state that
+        # prevent them from returning twice the same solution, but that's all.
         for neighbor, modifs in self.move(solution,
                                           converted_step,
                                           self.max_nb_neighbors):
@@ -296,6 +304,8 @@ def move_binary_flip(solution, step, nb_neighbors):
         Modifs: The modifications from given solution to neighbor.
 
     """
+    # TODO: This is crazy to do this. Find a way to randomly iterate over the
+    # combinations possibles
     all_flips = [x for x in combinations(range(len(solution)), r=step)]
     np.random.shuffle(all_flips)
 
@@ -336,6 +346,8 @@ def move_distance_continuous(solution, step, nb_neighbors):
     for _ in range(nb_neighbors):
         vector = np.random.normal(0, 1, len(solution))
         vector /= np.linalg.norm(vector)
+        # TODO: look at this and at the MoveRange (that do not start at 0),
+        # this is very strange (and probably mathematically false).
         vector *= step
         neighbor = solution.copy(True)
         neighbor += vector
@@ -366,6 +378,7 @@ def move_substitution(solution, step, nb_neighbors):
         Modifs: The modifications from given solution to neighbor.
 
     """
+    # TODO: very naive and inneficient method. Find a better way.
     all_possibilities = []
     for i, _ in enumerate(solution):
         allowed_values = set(range(solution.min_val(i),
@@ -375,6 +388,7 @@ def move_substitution(solution, step, nb_neighbors):
         np.random.shuffle(allowed_values)
         all_possibilities.append([(i, x) for x in allowed_values])
 
+    # TODO: this will probably crash the memory with number a bit big.
     all_comb = [x for x in combinations(all_possibilities, r=step)]
     all_subst = []
     for comb in all_comb:
@@ -411,6 +425,7 @@ def move_swap(solution, step, nb_neighbors):
         Modifs: The modifications from given solution to neighbor.
 
     """
+    # TODO: again, naive and way too costly for the memory.
     all_swaps = []
     for i in range(len(solution)-1):
         all_possibilities = []
