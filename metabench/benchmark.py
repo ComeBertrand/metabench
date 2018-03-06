@@ -42,6 +42,7 @@ class Benchmark(object):
 
     def run(self):
         """Compute the Benchmark."""
+        # TODO: add tqdm for time of computation
         self._results = []
         for i in range(len(self._problems)):
             for j in range(len(self._metaheuristics)):
