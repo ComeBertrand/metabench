@@ -9,7 +9,7 @@ metaheuristics on one or several problems.
 
 from time import clock
 
-from metabench.statistics.statistics import Statistics
+from metabench.statistics.statistics_recorder import StatisticsRecorder
 
 
 class Benchmark(object):
@@ -46,7 +46,7 @@ class Benchmark(object):
         self._results = []
         for i in range(len(self._problems)):
             for j in range(len(self._metaheuristics)):
-                self._results.append((i, j, Statistics(self._nb_runs)))
+                self._results.append((i, j, StatisticsRecorder(self._nb_runs)))
 
         for k in range(len(self._results)):
             self._compute(k)

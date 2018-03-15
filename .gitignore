@@ -93,3 +93,5 @@ ENV/
 
 # Ctags
 metabench/tags
+**/tags
+tags/

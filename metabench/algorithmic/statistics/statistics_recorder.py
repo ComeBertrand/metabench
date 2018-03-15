@@ -1,5 +1,5 @@
 """
-File: statistics.py
+File: statistics_recorder.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
@@ -10,7 +10,7 @@ benchmark computation.
 import numpy as np
 
 
-class Statistics(object):
+class StatisticsRecorder(object):
     """Compilation of statistics on a benchmark of a metaheuristic run.
 
     Args:

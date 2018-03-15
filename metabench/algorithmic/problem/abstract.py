@@ -1,11 +1,13 @@
 """
-File: problem.py
+File: abstract.py
 Author: Come Bertrand
 Email: bertrand.cosme@gmail.com
 Github: https://github.com/ComeBertrand
 Description: A problem describe a function or an instance that needs to be
 optimized.
 """
+
+from metabench.common.solution import Solution
 
 
 class Problem(object):
@@ -59,7 +61,7 @@ class Problem(object):
             Solution
 
         """
-        return self.encoding.generate_random_solution()
+        return Solution(self.encoding.generate_random_value(), self.encoding)
 
     def get_neighbors(self, solution, step):
         """Generate the neighbors of a given solution.

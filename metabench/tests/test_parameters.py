@@ -1,13 +1,11 @@
 import pytest
 
-import metabench as mb
 from metabench.tests.fixtures import *
+from metabench.parameters import *
 
 
 def test_parameter_desc():
-    p = mb.ParameterDesc('test_param_desc',
-                         'Used for testing purpose',
-                         'Bla')
+    p = ParameterDesc('test_param_desc', 'Used for testing purpose', 'Bla')
     assert p.name == 'test_param_desc'
     assert p.description == 'Used for testing purpose'
     assert p.default == 'Bla'
@@ -17,11 +15,7 @@ def test_parameter_desc():
 
 
 def test_parameter_desc_int():
-    p_int = mb.ParameterDescInt('test_param_desc_int',
-                                'Used for testing purpose',
-                                0,
-                                10,
-                                5)
+    p_int = ParameterDescInt('test_param_desc_int', 'Used for testing purpose', 0, 10, 5)
     assert p_int.min_val == 0
     assert p_int.max_val == 10
 
@@ -40,21 +34,13 @@ def test_parameter_desc_int():
     with pytest.raises(ValueError):
         p_int.check_value(11)
 
-    p_int = mb.ParameterDescInt('test_param_desc_int',
-                                'Used for testing purpose',
-                                None,
-                                10,
-                                5)
+    p_int = ParameterDescInt('test_param_desc_int', 'Used for testing purpose', None, 10, 5)
     p_int.check_value(-9999)
     p_int.check_value(10)
     with pytest.raises(ValueError):
         p_int.check_value(11)
 
-    p_int = mb.ParameterDescInt('test_param_desc_int',
-                                'Used for testing purpose',
-                                0,
-                                None,
-                                5)
+    p_int = ParameterDescInt('test_param_desc_int', 'Used for testing purpose', 0, None, 5)
     p_int.check_value(9999)
     p_int.check_value(0)
     with pytest.raises(ValueError):
@@ -62,11 +48,7 @@ def test_parameter_desc_int():
 
 
 def test_parameter_desc_float():
-    p_float = mb.ParameterDescFloat('test_param_desc_float',
-                                    'Used for testing purpose',
-                                    0.0,
-                                    10.0,
-                                    5.0)
+    p_float = ParameterDescFloat('test_param_desc_float', 'Used for testing purpose', 0.0, 10.0, 5.0)
     assert p_float.min_val == 0.0
     assert p_float.max_val == 10.0
 
@@ -85,21 +67,13 @@ def test_parameter_desc_float():
     with pytest.raises(ValueError):
         p_float.check_value(10.1)
 
-    p_float = mb.ParameterDescFloat('test_param_desc_float',
-                                    'Used for testing purpose',
-                                    None,
-                                    10.0,
-                                    5.0)
+    p_float = ParameterDescFloat('test_param_desc_float', 'Used for testing purpose', None, 10.0, 5.0)
     p_float.check_value(-9999.0)
     p_float.check_value(10.0)
     with pytest.raises(ValueError):
         p_float.check_value(10.1)
 
-    p_float = mb.ParameterDescFloat('test_param_desc_float',
-                                    'Used for testing purpose',
-                                    0.0,
-                                    None,
-                                    5.0)
+    p_float = ParameterDescFloat('test_param_desc_float', 'Used for testing purpose', 0.0, None, 5.0)
     p_float.check_value(9999.0)
     p_float.check_value(0.0)
     with pytest.raises(ValueError):
@@ -107,9 +81,7 @@ def test_parameter_desc_float():
 
 
 def test_parameter_desc_str():
-    p_str = mb.ParameterDescStr('test_param_desc_str',
-                                'Used for testing purpose',
-                                'default_str')
+    p_str = ParameterDescStr('test_param_desc_str', 'Used for testing purpose', 'default_str')
 
     with pytest.raises(TypeError):
         p_str.check_value(0.1)
@@ -120,10 +92,7 @@ def test_parameter_desc_str():
 
 
 def test_parameter_desc_enum():
-    p_enum = mb.ParameterDescEnum('test_param_desc_float',
-                                  'Used for testing purpose',
-                                  ['A', 0, object, None],
-                                  0)
+    p_enum = ParameterDescEnum('test_param_desc_float', 'Used for testing purpose', ['A', 0, object, None], 0)
     p_enum.check_value('A')
     p_enum.check_value(0)
     p_enum.check_value(object)
@@ -136,18 +105,18 @@ def test_parameter_desc_enum():
 
 
 def test_empty_parameters_creation():
-    descs = mb.Parameters.get_parameters_description()
+    descs = Parameters.get_parameters_description()
 
-    p = mb.Parameters()
+    p = Parameters()
     for param_desc in descs:
         val = getattr(p, param_desc.name)
         assert val == param_desc.default
 
 
 def test_some_parameters_creation(param_creation_some):
-    descs = mb.Parameters.get_parameters_description()
+    descs = Parameters.get_parameters_description()
 
-    p = mb.Parameters(**param_creation_some)
+    p = Parameters(**param_creation_some)
 
     for param_desc in descs:
         val = getattr(p, param_desc.name)
@@ -158,9 +127,9 @@ def test_some_parameters_creation(param_creation_some):
 
 
 def test_all_parameters_creation(param_creation_all):
-    descs = mb.Parameters.get_parameters_description()
+    descs = Parameters.get_parameters_description()
 
-    p = mb.Parameters(**param_creation_all)
+    p = Parameters(**param_creation_all)
 
     for param_desc in descs:
         val = getattr(p, param_desc.name)

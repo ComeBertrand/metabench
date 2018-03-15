@@ -34,6 +34,10 @@ class Solution(np.ndarray):
         self._encoding = getattr(obj, 'encoding', None)
         self._fitness = getattr(obj, 'fitness', None)
 
+    @staticmethod
+    def generate_random_from_encoding(encoding):
+        return Solution(encoding.generate_random_value(), encoding)
+
     @property
     def encoding(self):
         """Getter for the encoding of the solution.
