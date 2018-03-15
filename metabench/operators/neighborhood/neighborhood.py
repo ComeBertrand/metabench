@@ -10,8 +10,8 @@ from itertools import combinations, product
 
 import numpy as np
 
-from metabench.misc.decorators import implemented_for
-from metabench.prob.objective import Modifs
+from metabench.operators.utils.decorators import implemented_for
+from metabench.common.objective.objective import Modifs
 
 
 class MoveRange(object):

@@ -11,7 +11,7 @@ from functools import reduce
 
 import numpy as np
 
-from metabench.prob.solution import Solution
+from metabench.common.representation import Solution
 
 
 class Boundaries(np.ndarray):

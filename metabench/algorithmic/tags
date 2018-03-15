@@ -1,0 +1,200 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Ackleys	problem/continuous.py	/^class Ackleys(ContinuousProblem):$/;"	c
+Beale	problem/continuous.py	/^class Beale(ContinuousProblem):$/;"	c
+Benchmark	benchmark.py	/^class Benchmark(object):$/;"	c
+Bohachevsky	problem/continuous.py	/^class Bohachevsky(ContinuousProblem):$/;"	c
+Booth	problem/continuous.py	/^class Booth(ContinuousProblem):$/;"	c
+Branin	problem/continuous.py	/^class Branin(ContinuousProblem):$/;"	c
+Bukin6	problem/continuous.py	/^class Bukin6(ContinuousProblem):$/;"	c
+Colville	problem/continuous.py	/^class Colville(ContinuousProblem):$/;"	c
+ContinuousProblem	problem/continuous.py	/^class ContinuousProblem(Problem):$/;"	c
+CrossInTray	problem/continuous.py	/^class CrossInTray(ContinuousProblem):$/;"	c
+DeJong5	problem/continuous.py	/^class DeJong5(ContinuousProblem):$/;"	c
+DixonPrice	problem/continuous.py	/^class DixonPrice(ContinuousProblem):$/;"	c
+DropWave	problem/continuous.py	/^class DropWave(ContinuousProblem):$/;"	c
+Easom	problem/continuous.py	/^class Easom(ContinuousProblem):$/;"	c
+Eggholder	problem/continuous.py	/^class Eggholder(ContinuousProblem):$/;"	c
+Forrester	problem/continuous.py	/^class Forrester(ContinuousProblem):$/;"	c
+GoldsteinPrice	problem/continuous.py	/^class GoldsteinPrice(ContinuousProblem):$/;"	c
+GramacyLee	problem/continuous.py	/^class GramacyLee(ContinuousProblem):$/;"	c
+Griewank	problem/continuous.py	/^class Griewank(ContinuousProblem):$/;"	c
+Hartmann3D	problem/continuous.py	/^class Hartmann3D(ContinuousProblem):$/;"	c
+Hartmann6D	problem/continuous.py	/^class Hartmann6D(ContinuousProblem):$/;"	c
+HillClimbing	metaheuristic/hill_climbing.py	/^class HillClimbing(SMetaheuristic):$/;"	c
+HolderTable	problem/continuous.py	/^class HolderTable(ContinuousProblem):$/;"	c
+Langermann	problem/continuous.py	/^class Langermann(ContinuousProblem):$/;"	c
+Levy	problem/continuous.py	/^class Levy(ContinuousProblem):$/;"	c
+Levy13	problem/continuous.py	/^class Levy13(ContinuousProblem):$/;"	c
+Matyas	problem/continuous.py	/^class Matyas(ContinuousProblem):$/;"	c
+McCormick	problem/continuous.py	/^class McCormick(ContinuousProblem):$/;"	c
+Metaheuristic	metaheuristic/abstract.py	/^class Metaheuristic(object):$/;"	c
+Michalewicz	problem/continuous.py	/^class Michalewicz(ContinuousProblem):$/;"	c
+Perm	problem/continuous.py	/^class Perm(ContinuousProblem):$/;"	c
+Perm0	problem/continuous.py	/^class Perm0(ContinuousProblem):$/;"	c
+Powell	problem/continuous.py	/^class Powell(ContinuousProblem):$/;"	c
+PowerSum	problem/continuous.py	/^class PowerSum(ContinuousProblem):$/;"	c
+Problem	problem/problem.py	/^class Problem(object):$/;"	c
+Rastrigin	problem/continuous.py	/^class Rastrigin(ContinuousProblem):$/;"	c
+Rosenbrock	problem/continuous.py	/^class Rosenbrock(ContinuousProblem):$/;"	c
+RotatedHyperEllipsoid	problem/continuous.py	/^class RotatedHyperEllipsoid(ContinuousProblem):$/;"	c
+SMetaheuristic	metaheuristic/abstract.py	/^class SMetaheuristic(Metaheuristic):$/;"	c
+Schaffer2	problem/continuous.py	/^class Schaffer2(ContinuousProblem):$/;"	c
+Schaffer4	problem/continuous.py	/^class Schaffer4(ContinuousProblem):$/;"	c
+Schwefel	problem/continuous.py	/^class Schwefel(ContinuousProblem):$/;"	c
+Shekel	problem/continuous.py	/^class Shekel(ContinuousProblem):$/;"	c
+Shubert	problem/continuous.py	/^class Shubert(ContinuousProblem):$/;"	c
+SixHumpCamel	problem/continuous.py	/^class SixHumpCamel(ContinuousProblem):$/;"	c
+Sphere	problem/continuous.py	/^class Sphere(ContinuousProblem):$/;"	c
+Statistics	statistics/statistics.py	/^class Statistics(object):$/;"	c
+StyblinskiTang	problem/continuous.py	/^class StyblinskiTang(ContinuousProblem):$/;"	c
+SumDiffPower	problem/continuous.py	/^class SumDiffPower(ContinuousProblem):$/;"	c
+SumSquare	problem/continuous.py	/^class SumSquare(ContinuousProblem):$/;"	c
+ThreeHumpCamel	problem/continuous.py	/^class ThreeHumpCamel(ContinuousProblem):$/;"	c
+Trid	problem/continuous.py	/^class Trid(ContinuousProblem):$/;"	c
+Zakharov	problem/continuous.py	/^class Zakharov(ContinuousProblem):$/;"	c
+__init__	benchmark.py	/^    def __init__(self, nb_runs):$/;"	m	class:Benchmark
+__init__	metaheuristic/abstract.py	/^    def __init__(self, problem):$/;"	m	class:Metaheuristic
+__init__	metaheuristic/hill_climbing.py	/^    def __init__(self, problem, base_step=0.1):$/;"	m	class:HillClimbing
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Beale
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Booth
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Branin
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Bukin6
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Colville
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:CrossInTray
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:DeJong5
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:DropWave
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Easom
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Eggholder
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Forrester
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:GramacyLee
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Hartmann3D
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:HolderTable
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Langermann
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Levy13
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Matyas
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:McCormick
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:PowerSum
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Schaffer2
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Schaffer4
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Shekel
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:Shubert
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:SixHumpCamel
+__init__	problem/continuous.py	/^    def __init__(self):$/;"	m	class:ThreeHumpCamel
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Ackleys
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:DixonPrice
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Griewank
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Levy
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Michalewicz
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Powell
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Rastrigin
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Rosenbrock
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:RotatedHyperEllipsoid
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Schwefel
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Sphere
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:StyblinskiTang
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:SumDiffPower
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:SumSquare
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Trid
+__init__	problem/continuous.py	/^    def __init__(self, n_dim):$/;"	m	class:Zakharov
+__init__	problem/continuous.py	/^    def __init__(self, n_dim, beta):$/;"	m	class:Perm
+__init__	problem/continuous.py	/^    def __init__(self, n_dim, beta):$/;"	m	class:Perm0
+__init__	problem/continuous.py	/^    def __init__(self, n_dim, min_vals, max_vals, move_range, known_min):$/;"	m	class:ContinuousProblem
+__init__	problem/continuous.py	/^    def __init__(self, num_func=1):$/;"	m	class:Bohachevsky
+__init__	problem/continuous.py	/^    def __init__(self, rescaled_form=False):$/;"	m	class:GoldsteinPrice
+__init__	problem/continuous.py	/^    def __init__(self, rescaled_form=False):$/;"	m	class:Hartmann6D
+__init__	problem/problem.py	/^    def __init__(self, objective, encoding, neighborhood=None, known_min=None):$/;"	m	class:Problem
+__init__	statistics/statistics.py	/^    def __init__(self, nb_run, base_size=256):$/;"	m	class:Statistics
+__str__	benchmark.py	/^    def __str__(self):$/;"	m	class:Benchmark	file:
+__str__	statistics/statistics.py	/^    def __str__(self):$/;"	m	class:Statistics	file:
+_compute	benchmark.py	/^    def _compute(self, index):$/;"	m	class:Benchmark
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Ackleys
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Beale
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Bohachevsky
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Booth
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Branin
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Bukin6
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Colville
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:ContinuousProblem
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:CrossInTray
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:DeJong5
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:DixonPrice
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:DropWave
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Easom
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Eggholder
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Forrester
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:GoldsteinPrice
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:GramacyLee
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Griewank
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Hartmann3D
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Hartmann6D
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:HolderTable
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Langermann
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Levy
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Levy13
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Matyas
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:McCormick
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Michalewicz
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Perm
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Perm0
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Powell
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:PowerSum
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Rastrigin
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Rosenbrock
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:RotatedHyperEllipsoid
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Schaffer2
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Schaffer4
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Schwefel
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Shekel
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Shubert
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:SixHumpCamel
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Sphere
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:StyblinskiTang
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:SumDiffPower
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:SumSquare
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:ThreeHumpCamel
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Trid
+_eval_func	problem/continuous.py	/^    def _eval_func(self, solution):$/;"	m	class:Zakharov
+_eval_func_1	problem/continuous.py	/^    def _eval_func_1(self, solution):$/;"	m	class:Bohachevsky
+_eval_func_2	problem/continuous.py	/^    def _eval_func_2(self, solution):$/;"	m	class:Bohachevsky
+_eval_func_3	problem/continuous.py	/^    def _eval_func_3(self, solution):$/;"	m	class:Bohachevsky
+_eval_not_rescaled	problem/continuous.py	/^    def _eval_not_rescaled(self, solution):$/;"	m	class:GoldsteinPrice
+_eval_rescaled	problem/continuous.py	/^    def _eval_rescaled(self, solution):$/;"	m	class:GoldsteinPrice
+_get_candidates	metaheuristic/abstract.py	/^    def _get_candidates(self):$/;"	m	class:SMetaheuristic
+_get_candidates	metaheuristic/hill_climbing.py	/^    def _get_candidates(self):$/;"	m	class:HillClimbing
+_get_initial_solution	metaheuristic/abstract.py	/^    def _get_initial_solution(self):$/;"	m	class:SMetaheuristic
+_get_initial_solution	metaheuristic/hill_climbing.py	/^    def _get_initial_solution(self):$/;"	m	class:HillClimbing
+_select_solution	metaheuristic/abstract.py	/^    def _select_solution(self, candidates):$/;"	m	class:SMetaheuristic
+_select_solution	metaheuristic/hill_climbing.py	/^    def _select_solution(self, candidates):$/;"	m	class:HillClimbing
+_stopping_criterion	metaheuristic/abstract.py	/^    def _stopping_criterion(self):$/;"	m	class:SMetaheuristic
+_stopping_criterion	metaheuristic/hill_climbing.py	/^    def _stopping_criterion(self):$/;"	m	class:HillClimbing
+add_meta	benchmark.py	/^    def add_meta(self, metaheuristic_class, *args, **kwargs):$/;"	m	class:Benchmark
+add_prob	benchmark.py	/^    def add_prob(self, problem_class, *args, **kwargs):$/;"	m	class:Benchmark
+best_time_iter	statistics/statistics.py	/^    def best_time_iter(self):$/;"	m	class:Statistics
+best_time_tot	statistics/statistics.py	/^    def best_time_tot(self):$/;"	m	class:Statistics
+best_value	statistics/statistics.py	/^    def best_value(self):$/;"	m	class:Statistics
+best_values	statistics/statistics.py	/^    def best_values(self):$/;"	m	class:Statistics
+evaluate	problem/problem.py	/^    def evaluate(self, solution, modifs=None):$/;"	m	class:Problem
+generate_solution	problem/problem.py	/^    def generate_solution(self):$/;"	m	class:Problem
+get_neighbors	problem/problem.py	/^    def get_neighbors(self, solution, step):$/;"	m	class:Problem
+mean_time_iter	statistics/statistics.py	/^    def mean_time_iter(self):$/;"	m	class:Statistics
+mean_time_tot	statistics/statistics.py	/^    def mean_time_tot(self):$/;"	m	class:Statistics
+mean_value	statistics/statistics.py	/^    def mean_value(self):$/;"	m	class:Statistics
+nb_iter_per_run	statistics/statistics.py	/^    def nb_iter_per_run(self):$/;"	m	class:Statistics
+nb_iter_total	statistics/statistics.py	/^    def nb_iter_total(self):$/;"	m	class:Statistics
+nb_run	statistics/statistics.py	/^    def nb_run(self):$/;"	m	class:Statistics
+record_iter_stat	statistics/statistics.py	/^    def record_iter_stat(self, num_run, best_solution, time_iteration):$/;"	m	class:Statistics
+record_time_computation	statistics/statistics.py	/^    def record_time_computation(self, num_run, time_computation):$/;"	m	class:Statistics
+run	benchmark.py	/^    def run(self):$/;"	m	class:Benchmark
+run	metaheuristic/abstract.py	/^    def run(self):$/;"	m	class:Metaheuristic
+run	metaheuristic/abstract.py	/^    def run(self):$/;"	m	class:SMetaheuristic
+std_time_iter	statistics/statistics.py	/^    def std_time_iter(self):$/;"	m	class:Statistics
+std_time_tot	statistics/statistics.py	/^    def std_time_tot(self):$/;"	m	class:Statistics
+std_value	statistics/statistics.py	/^    def std_value(self):$/;"	m	class:Statistics
+worst_time_iter	statistics/statistics.py	/^    def worst_time_iter(self):$/;"	m	class:Statistics
+worst_time_tot	statistics/statistics.py	/^    def worst_time_tot(self):$/;"	m	class:Statistics
+worst_value	statistics/statistics.py	/^    def worst_value(self):$/;"	m	class:Statistics
