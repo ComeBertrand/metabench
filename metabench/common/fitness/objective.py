@@ -6,7 +6,7 @@ Github: https://github.com/ComeBertrand
 Description: Wrappers for the fitness functions.
 """
 
-from metabench.common.fitness.modif import Modifs
+from .modif import Modifs
 
 
 class Objective(object):

@@ -1,7 +1,7 @@
 import numpy as np
 
-from metabench.tests.fixtures import *
-from metabench.algorithmic.operators.neighborhood import *
+from .fixtures import *
+from ..operators.neighborhood import *
 
 
 def test_binary_one_flip(binary_solution):

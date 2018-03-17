@@ -1,13 +1,12 @@
 import pytest
 import numpy as np
 
-from metabench.common.solution import Solution
-from metabench.common.representation import (Boundaries, BinaryEncoding, DiscreteEncoding, RealEncoding,
-                                             PermutationEncoding)
-from metabench.common.fitness import Modifs
-from metabench.algorithmic.statistics import StatisticsRecorder
-from metabench.algorithmic.operators.neighborhood import (ContinuousMoveRange, ContinuousLogMoveRange,
-                                                          DiscreteMoveRange, DiscreteLogMoveRange)
+from ..common.solution import Solution
+from ..common.representation import Boundaries, BinaryEncoding, DiscreteEncoding, RealEncoding, PermutationEncoding
+from ..common.fitness import Modifs
+from ..models.statistics import StatisticsRecorder
+from ..operators.neighborhood import (ContinuousMoveRange, ContinuousLogMoveRange, DiscreteMoveRange,
+                                      DiscreteLogMoveRange)
 
 NB_ATTRIBUTES = 5
 MIN_VAL_INT = 0

@@ -11,7 +11,7 @@ from functools import reduce
 
 import numpy as np
 
-from metabench.common.representation.boundaries import Boundaries
+from .boundaries import Boundaries
 
 
 class Encoding(object):

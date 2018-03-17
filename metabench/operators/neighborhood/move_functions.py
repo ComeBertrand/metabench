@@ -10,8 +10,8 @@ from itertools import combinations, product
 
 import numpy as np
 
-from metabench.algorithmic.utils import implemented_for
-from metabench.common.fitness import Modifs
+from ...utils import implemented_for
+from ...common.fitness import Modifs
 
 
 @implemented_for('BinaryEncoding')

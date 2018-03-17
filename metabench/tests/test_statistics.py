@@ -1,9 +1,8 @@
 import pytest
 import numpy as np
 
-import metabench as mb
-from metabench.tests.fixtures import *
-from metabench.algorithmic.statistics import StatisticsRecorder
+from .fixtures import *
+from ..models.statistics import StatisticsRecorder
 
 
 def test_statistics_creation():

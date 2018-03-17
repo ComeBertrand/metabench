@@ -1,7 +1,7 @@
 import numpy as np
 
-from metabench.tests.fixtures import *
-from metabench.common.solution import Solution
+from .fixtures import *
+from ..common.solution import Solution
 
 
 def test_generation_solution_binary(binary_encoding):

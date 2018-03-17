@@ -1,8 +1,7 @@
 import pytest
 
-import metabench as mb
-from metabench.tests.fixtures import *
-from metabench.common.fitness import *
+from .fixtures import *
+from ..common.fitness import *
 
 
 def test_modifs_add_modif(modifs):

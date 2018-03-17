@@ -2,9 +2,8 @@ import math
 
 import numpy as np
 
-from metabench.common.representation import *
-from metabench.common.representation.encoding import Encoding
-from metabench.tests.fixtures import *
+from .fixtures import *
+from ..common.representation.encoding import *
 
 
 def test_boundaries_creation_int(min_bound_int, max_bound_int):

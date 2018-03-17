@@ -1,7 +1,7 @@
 import pytest
 
-from metabench.tests.fixtures import *
-from metabench.algorithmic.utils import not_implemented_for, implemented_for
+from .fixtures import *
+from ..utils import not_implemented_for, implemented_for
 
 
 def test_not_implemented_one_type(fitness_func,

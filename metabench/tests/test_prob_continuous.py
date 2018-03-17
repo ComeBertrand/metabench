@@ -1,7 +1,6 @@
 import pytest
 
-import metabench as mb
-from metabench.algorithmic.problem.continuous import *
+from ..default.problems.continuous import *
 
 
 def _perform_continuous_problem_test(cp):

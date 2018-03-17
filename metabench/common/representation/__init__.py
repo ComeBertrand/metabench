@@ -1,3 +1,2 @@
-from metabench.common.representation.boundaries import Boundaries
-from metabench.common.representation.encoding import (BinaryEncoding, DiscreteEncoding, RealEncoding,
-                                                      PermutationEncoding)
+from .boundaries import Boundaries
+from .encoding import Encoding, BinaryEncoding, DiscreteEncoding, RealEncoding, PermutationEncoding

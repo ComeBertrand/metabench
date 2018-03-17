@@ -1,2 +1,2 @@
-from metabench.common.fitness.modif import Modifs
-from metabench.common.fitness.objective import Objective, ObjectiveNoisy
+from .modif import Modifs
+from .objective import Objective, ObjectiveNoisy

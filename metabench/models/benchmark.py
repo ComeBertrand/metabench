@@ -9,7 +9,7 @@ metaheuristics on one or several problems.
 
 from time import clock
 
-from metabench.statistics.statistics_recorder import StatisticsRecorder
+from .statistics import StatisticsRecorder
 
 
 class Benchmark(object):

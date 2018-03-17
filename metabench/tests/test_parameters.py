@@ -1,7 +1,7 @@
 import pytest
 
-from metabench.tests.fixtures import *
-from metabench.parameters import *
+from .fixtures import *
+from ..models.parameters import *
 
 
 def test_parameter_desc():

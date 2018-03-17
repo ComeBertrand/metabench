@@ -7,7 +7,7 @@ Description: A problem describe a function or an instance that needs to be
 optimized.
 """
 
-from metabench.common.solution import Solution
+from ..common.solution import Solution
 
 
 class Problem(object):

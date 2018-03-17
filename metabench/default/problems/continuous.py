@@ -10,11 +10,10 @@ https://www.sfu.ca/~ssurjano/optimization.html
 
 import numpy as np
 
-from metabench.algorithmic.problem.abstract import Problem
-from metabench.common.representation import RealEncoding, Boundaries
-from metabench.common.fitness import Objective
-from metabench.algorithmic.operators.neighborhood import (NeighborhoodGenerator, move_distance_continuous,
-                                                          ContinuousLogMoveRange)
+from ...models import Problem
+from ...common.representation import RealEncoding, Boundaries
+from ...common.fitness import Objective
+from ...operators.neighborhood import NeighborhoodGenerator, move_distance_continuous, ContinuousLogMoveRange
 
 
 class ContinuousProblem(Problem):
