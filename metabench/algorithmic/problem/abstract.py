@@ -20,11 +20,11 @@ class Problem(object):
     Args:
         objective (Objective): The objective (or fitness) function to optimize.
         encoding (Encoding): The encoding of the candidate solutions.
+        known_min (float): Known minimum of the fitness for the problem. If it
+            is not known, set to None. Default is None.
         neighborhood (Neighborhood): Neighborhood operator that can be used to
             find neighboring candidate solutions for a given solution. Default
             is None.
-        known_min (float): Known minimum of the fitness for the problem. If it
-            is not known, set to None. Default is None.
 
     Attributes:
         objective (Objective): The objective (or fitness) function to optimize.
@@ -33,11 +33,11 @@ class Problem(object):
             find neighboring candidate solutions for a given solution.
 
     """
-    def __init__(self, objective, encoding, neighborhood=None, known_min=None):
+    def __init__(self, objective, encoding, known_min=None, neighborhood=None):
         self.objective = objective
         self.encoding = encoding
-        self.neighborhood = neighborhood
         self.known_min = known_min
+        self.neighborhood = neighborhood
 
     def evaluate(self, solution, modifs=None):
         """Evaluate the fitness of a solution.

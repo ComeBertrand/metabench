@@ -1,1 +1,1 @@
-from metabench.algorithmic.metaheuristic.abstract import SMetaheuristic
+from metabench.algorithmic.metaheuristic.abstract import Metaheuristic, SMetaheuristic
