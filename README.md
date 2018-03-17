@@ -17,12 +17,10 @@ Using
 Just write in Python
 
 ```python
->>> from metabench.algorithmics.benchmark import Benchmark
->>> from metabench.algorithmics.problem.continuous import Sphere
->>> from metabench.algorithmics.metaheuristics.hill_climbing import HillClimbing
->>> b = Benchmark(10)
->>> b.add_meta(HillClimbing)
->>> b.add_prob(Sphere, 10)
+>>> import metabench as mb
+>>> b = mb.Benchmark(10)
+>>> b.add_meta(mb.default.HillClimbing)
+>>> b.add_prob(mb.default.Sphere, 10)
 >>> b.run()
 >>> print(b)
 --------------------------------------------------------------

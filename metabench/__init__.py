@@ -12,8 +12,8 @@ Using
 
     >>> import metabench as mb
     >>> b = mb.Benchmark(10)
-    >>> b.add_meta(mb.meta.HillClimbing)
-    >>> b.add_prob(mb.prob.Sphere, 10)
+    >>> b.add_meta(mb.default.HillClimbing)
+    >>> b.add_prob(mb.default.Sphere, 10)
     >>> b.run()
     >>> print(b)
     --------------------------------------------------------------
@@ -62,3 +62,11 @@ del sys
 __author__ = 'Come Bertrand'
 __license__ = 'MIT License'
 __version__ = '0.0.1'
+
+
+from .common import *
+from . import default
+from .display import *
+from .models import *
+from .operators import *
+from .utils import *
