@@ -13,7 +13,7 @@ import numpy as np
 from ...models import Problem
 from ...common.representation import RealEncoding, Boundaries
 from ...common.fitness import Objective
-from ...operators.neighborhood import NeighborhoodGenerator, move_distance_continuous, ContinuousLogMoveRange
+from ...operators.neighborhood import NeighborhoodOperator, move_distance_continuous, ContinuousLogMoveRange
 
 
 class ContinuousProblem(Problem):
@@ -32,7 +32,7 @@ class ContinuousProblem(Problem):
     """
     def __init__(self, n_dim, min_vals, max_vals, move_range, known_min):
         nb_neighbors = n_dim * 100 # TODO: shall be an argument of the object
-        neighborhood = NeighborhoodGenerator(move_distance_continuous, move_range, nb_neighbors)
+        neighborhood = NeighborhoodOperator(move_distance_continuous, move_range, nb_neighbors)
         boundaries = Boundaries(min_vals, max_vals, np.float)
         encoding = RealEncoding(boundaries)
         objective = Objective(self._eval_func)

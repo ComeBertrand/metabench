@@ -7,6 +7,7 @@ Description: Recorder of modifications made on a solution.
 """
 
 from collections import OrderedDict
+from operator import itemgetter
 
 
 class Modifs(OrderedDict):
@@ -44,3 +45,6 @@ class Modifs(OrderedDict):
     def __setitem__(self, key, value):
         """Only allow the setting of values through the add_modif method."""
         raise NotImplementedError("Use the add_modif method instead")
+
+    def __hash__(self):
+        return hash(tuple(sorted([(index, values) for index, values in self.items()], key=itemgetter(0))))

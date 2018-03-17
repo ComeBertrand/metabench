@@ -205,7 +205,7 @@ def test_dmv_log_convert(discrete_log_move_range):
 
 
 def test_neighborhood(real_solution, continuous_move_range):
-    n = NeighborhoodGenerator(move_distance_continuous, continuous_move_range, NB_NEIGHBORS)
+    n = NeighborhoodOperator(move_distance_continuous, continuous_move_range, NB_NEIGHBORS)
     list_neighbors = [neighbor for neighbor, _ in n(real_solution, 0.5)]
 
     max_dist = continuous_move_range.convert(0.5)
