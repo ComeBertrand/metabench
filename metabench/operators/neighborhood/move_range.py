@@ -23,9 +23,6 @@ class MoveRange(object):
     ContinuousMoveRange and DiscreteMoveRange.
 
     """
-    def __init__(self):
-        raise NotImplementedError("Abstract class")
-
     def convert(self, step):
         """Convert the normalized step of a metaheuristic to the real step.
 

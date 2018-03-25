@@ -6,26 +6,7 @@ Github: https://github.com/ComeBertrand
 Description: Operators that create neighbors for a solution.
 """
 
-import numpy as np
-
-from .move_functions import MoveFunctionsEnum
-from .move_range import ContinuousMoveRange, ContinuousLogMoveRange, DiscreteMoveRange, DiscreteLogMoveRange
 from ..abstract_operator import AbstractOperator, OperatorType
-
-
-def neigborhood_factory(move_function_enum, min_range, max_range, log_range=False, max_nb_neighbors=1):
-    if move_function_enum == MoveFunctionsEnum.DISTANCE_CONTINUOUS:
-        if log_range:
-            move_range = ContinuousLogMoveRange(float(min_range), float(max_range))
-        else:
-            move_range = ContinuousMoveRange(float(min_range), float(max_range))
-    else:
-        if log_range:
-            move_range = DiscreteLogMoveRange(int(min_range), int(max_range))
-        else:
-            move_range = DiscreteMoveRange(int(min_range), int(max_range))
-
-    return NeighborhoodOperator(move_function_enum.value, move_range, max_nb_neighbors)
 
 
 class NeighborhoodOperator(AbstractOperator):

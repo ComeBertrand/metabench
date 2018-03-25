@@ -6,7 +6,6 @@ Github: https://github.com/ComeBertrand
 Description: Move functions for space discovery.
 """
 
-from itertools import combinations, product
 from enum import Enum
 
 import numpy as np
@@ -97,11 +96,11 @@ def move_substitution(solution, step):
         allowed_values = set(range(solution.min_val(substitution_index),
                                    solution.max_val(substitution_index) + 1))
         allowed_values.remove(solution[substitution_index])
-        new_value = np.random.choice(allowed_values, size=1)
+        new_value = np.random.choice(list(allowed_values), size=1)
         neighbor[substitution_index] = new_value
-        modif.add_modif(substitution_index, solution[substitution_index], new_value)
+        modifs.add_modif(substitution_index, solution[substitution_index], new_value)
 
-    return neighbor, modif
+    return neighbor, modifs
 
 
 @implemented_for('PermutationEncoding')
