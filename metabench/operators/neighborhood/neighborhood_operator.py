@@ -6,10 +6,10 @@ Github: https://github.com/ComeBertrand
 Description: Operators that create neighbors for a solution.
 """
 
-import numpy as np
+from ..abstract_operator import AbstractOperator, OperatorType
 
 
-class NeighborhoodGenerator(object):
+class NeighborhoodOperator(AbstractOperator):
     """Compute the neighborhood for the solutions.
 
     Args:
@@ -43,17 +43,18 @@ class NeighborhoodGenerator(object):
         [0, 0, 0, 1, 1, 0, 0, 0, 1, 0]
 
     """
+    op_type = OperatorType.NEIGHBORHOOD
+
     def __init__(self, move, move_range, max_nb_neighbors):
+        super().__init__(move_range)
         self.move = move
-        self.move_range = move_range
         self.max_nb_neighbors = max_nb_neighbors
 
-    def __call__(self, solution, step):
+    def __call__(self, solution, step=0.):
         """Compute the neighbors of a solution.
 
         Args:
             solution (Solution): Solution for which the neighbors must be
-                computed.
             step (float): Normalized step given by the metaheuristic. Strictly
                 between 0.0 and 1.0.
 
@@ -63,12 +64,13 @@ class NeighborhoodGenerator(object):
                 neighbor.
 
         """
-        converted_step = self.move_range.convert(step)
-        # TODO: remove the nb_neighbors from the move functions. Moves shall
-        # be atomic and just make a modification on a solution and return a
-        # neighbor and a modification. They shall probably have a state that
-        # prevent them from returning twice the same solution, but that's all.
-        for neighbor, modifs in self.move(solution,
-                                          converted_step,
-                                          self.max_nb_neighbors):
-            yield neighbor, modifs
+        converted_step = self._convert_step(step)
+        seen_modifs = set()
+        for _ in range(self.max_nb_neighbors):
+            result = None
+            while result is None:
+                neighbor, modif = self.move(solution, converted_step)
+                if not modif or modif not in seen_modifs:
+                    seen_modifs.add(modif)
+                    result = (neighbor, modif)
+            yield result

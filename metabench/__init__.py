@@ -54,8 +54,8 @@ Using
 
 import sys
 if sys.version_info[0] < 3:
-    m = "Python 3 is required for Metabench ({:d}.{:d} detected)."
-    raise ImportError(m.format(sys.version_info[:2]))
+    message = "Python 3 is required for Metabench ({:d}.{:d} detected)."
+    raise ImportError(message.format(sys.version_info[:2]))
 del sys
 
 

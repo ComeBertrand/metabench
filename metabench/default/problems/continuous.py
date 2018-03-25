@@ -13,7 +13,7 @@ import numpy as np
 from ...models import Problem
 from ...common.representation import RealEncoding, Boundaries
 from ...common.fitness import Objective
-from ...operators.neighborhood import NeighborhoodGenerator, move_distance_continuous, ContinuousLogMoveRange
+from ...operators.neighborhood import NeighborhoodOperator, move_distance_continuous, ContinuousLogMoveRange
 
 
 class ContinuousProblem(Problem):
@@ -32,7 +32,7 @@ class ContinuousProblem(Problem):
     """
     def __init__(self, n_dim, min_vals, max_vals, move_range, known_min):
         nb_neighbors = n_dim * 100 # TODO: shall be an argument of the object
-        neighborhood = NeighborhoodGenerator(move_distance_continuous, move_range, nb_neighbors)
+        neighborhood = NeighborhoodOperator(move_distance_continuous, move_range, nb_neighbors)
         boundaries = Boundaries(min_vals, max_vals, np.float)
         encoding = RealEncoding(boundaries)
         objective = Objective(self._eval_func)
@@ -258,11 +258,10 @@ class Levy13(ContinuousProblem):
         super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
-        x1 = solution[0]
-        x2 = solution[1]
-        part1 = np.power(np.sin(3 * np.pi * x1), 2)
-        part2 = (x1 - 1) * (x1 - 1) * (1 + np.power(np.sin(3 * np.pi * x2), 2))
-        part3 = (x2 - 1) * (x2 - 1) * (1 + np.power(np.sin(2 * np.pi * x2), 2))
+        arg1, arg2 = solution
+        part1 = np.power(np.sin(3 * np.pi * arg1), 2)
+        part2 = (arg1 - 1) * (arg1 - 1) * (1 + np.power(np.sin(3 * np.pi * arg2), 2))
+        part3 = (arg2 - 1) * (arg2 - 1) * (1 + np.power(np.sin(2 * np.pi * arg2), 2))
         return part1 + part2 + part3
 
 
@@ -339,10 +338,10 @@ class Schwefel(ContinuousProblem):
         super().__init__(n_dim, min_vals, max_vals, move_range, known_min)
 
     def _eval_func(self, solution):
-        A = 418.9829
+        A_constant = 418.9829
         n = len(solution)
         sq_sol = np.sqrt(np.abs(solution))
-        return A*n - 1.0 * np.sum(solution * np.sin(sq_sol))
+        return A_constant * n - 1.0 * np.sum(solution * np.sin(sq_sol))
 
 
 class Shubert(ContinuousProblem):
