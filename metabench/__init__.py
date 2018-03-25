@@ -12,8 +12,8 @@ Using
 
     >>> import metabench as mb
     >>> b = mb.Benchmark(10)
-    >>> b.add_meta(mb.meta.HillClimbing)
-    >>> b.add_prob(mb.prob.Sphere, 10)
+    >>> b.add_meta(mb.default.HillClimbing)
+    >>> b.add_prob(mb.default.Sphere, 10)
     >>> b.run()
     >>> print(b)
     --------------------------------------------------------------
@@ -64,18 +64,9 @@ __license__ = 'MIT License'
 __version__ = '0.0.1'
 
 
-from metabench.benchmark import *
-from metabench.draw import *
-from metabench.parameters import *
-from metabench.statistics import *
-
-from metabench.prob.solution import *
-from metabench.prob.problem import *
-from metabench.prob.objective import *
-from metabench.prob.encoding import *
-from metabench.prob.constraint import *
-from metabench.prob.operators.neighborhood import *
-
-from metabench.misc.decorators import *
-
-from metabench.meta.metaheuristic import *
+from .common import *
+from . import default
+from .display import *
+from .models import *
+from .operators import *
+from .utils import *

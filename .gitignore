@@ -1,5 +1,6 @@
 # Vim swap files
 *.swp
+*.swo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -90,3 +91,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Ctags
+metabench/tags
+**/tags
+tags/

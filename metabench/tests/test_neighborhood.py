@@ -1,13 +1,11 @@
 import numpy as np
 
-import metabench as mb
-from metabench.tests.fixtures import *
+from .fixtures import *
+from ..operators.neighborhood import *
 
 
 def test_binary_one_flip(binary_solution):
-    neighborhood = [(n, m) for n, m in mb.move_binary_flip(binary_solution,
-                                                           1,
-                                                           None)]
+    neighborhood = [(n, m) for n, m in move_binary_flip(binary_solution, 1, None)]
     assert len(neighborhood) == NB_ATTRIBUTES
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -28,9 +26,7 @@ def test_binary_one_flip(binary_solution):
 
 
 def test_binary_two_flip(binary_solution):
-    neighborhood = [(n, m) for n, m in mb.move_binary_flip(binary_solution,
-                                                           2,
-                                                           10)]
+    neighborhood = [(n, m) for n, m in move_binary_flip(binary_solution, 2, 10)]
     assert len(neighborhood) == 10
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -51,9 +47,7 @@ def test_binary_two_flip(binary_solution):
 
 
 def test_move_continuous(real_solution):
-    neighborhood = [(n, m) for n, m in
-                    mb.move_distance_continuous(real_solution, STEP,
-                                                NB_NEIGHBORS)]
+    neighborhood = [(n, m) for n, m in move_distance_continuous(real_solution, STEP, NB_NEIGHBORS)]
     assert len(neighborhood) == NB_NEIGHBORS
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -67,9 +61,7 @@ def test_move_continuous(real_solution):
 
 
 def test_one_substitution(discrete_solution):
-    neighborhood = [(n, m) for n, m in mb.move_substitution(discrete_solution,
-                                                            1,
-                                                            None)]
+    neighborhood = [(n, m) for n, m in move_substitution(discrete_solution, 1, None)]
     assert len(neighborhood) == (NB_ATTRIBUTES * (MAX_VAL_INT - MIN_VAL_INT))
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -88,9 +80,7 @@ def test_one_substitution(discrete_solution):
 
 
 def test_two_substitution(discrete_solution):
-    neighborhood = [(n, m) for n, m in mb.move_substitution(discrete_solution,
-                                                            2,
-                                                            10)]
+    neighborhood = [(n, m) for n, m in move_substitution(discrete_solution, 2, 10)]
     assert len(neighborhood) == 10
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -109,9 +99,7 @@ def test_two_substitution(discrete_solution):
 
 
 def test_one_swap(permutation_solution):
-    neighborhood = [(n, m) for n, m in mb.move_swap(permutation_solution,
-                                                    1,
-                                                    None)]
+    neighborhood = [(n, m) for n, m in move_swap(permutation_solution, 1, None)]
     assert len(neighborhood) == (NB_ATTRIBUTES * (NB_ATTRIBUTES - 1)) / 2
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -134,9 +122,7 @@ def test_one_swap(permutation_solution):
 
 
 def test_two_swap(permutation_solution):
-    neighborhood = [(n, m) for n, m in mb.move_swap(permutation_solution,
-                                                    2,
-                                                    10)]
+    neighborhood = [(n, m) for n, m in move_swap(permutation_solution, 2, 10)]
     assert len(neighborhood) == 10
     for index, vals in enumerate(neighborhood):
         n, m = neighborhood[index]
@@ -173,23 +159,23 @@ def test_move_range_check_step(continuous_move_range):
 
 
 def test_continuous_mv_creation():
-    cmv = mb.ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_FLO)
+    cmv = ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_FLO)
     with pytest.raises(ValueError):
-        mb.ContinuousMoveRange(MIN_VAL_FLO + 1.0, MIN_VAL_FLO)
+        ContinuousMoveRange(MIN_VAL_FLO + 1.0, MIN_VAL_FLO)
     with pytest.raises(TypeError):
-        mb.ContinuousMoveRange(MIN_VAL_INT, MAX_VAL_FLO)
+        ContinuousMoveRange(MIN_VAL_INT, MAX_VAL_FLO)
     with pytest.raises(TypeError):
-        mb.ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_INT)
+        ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_INT)
 
 
 def test_discrete_mv_creation():
-    dmv = mb.DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_INT)
+    dmv = DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_INT)
     with pytest.raises(ValueError):
-        mb.DiscreteMoveRange(MIN_VAL_INT + 1, MIN_VAL_INT)
+        DiscreteMoveRange(MIN_VAL_INT + 1, MIN_VAL_INT)
     with pytest.raises(TypeError):
-        mb.DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_FLO)
+        DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_FLO)
     with pytest.raises(TypeError):
-        mb.DiscreteMoveRange(MIN_VAL_FLO, MAX_VAL_INT)
+        DiscreteMoveRange(MIN_VAL_FLO, MAX_VAL_INT)
 
 
 def test_cmv_convert(continuous_move_range):
@@ -219,9 +205,7 @@ def test_dmv_log_convert(discrete_log_move_range):
 
 
 def test_neighborhood(real_solution, continuous_move_range):
-    n = mb.Neighborhood(mb.move_distance_continuous,
-                        continuous_move_range,
-                        NB_NEIGHBORS)
+    n = NeighborhoodGenerator(move_distance_continuous, continuous_move_range, NB_NEIGHBORS)
     list_neighbors = [neighbor for neighbor, _ in n(real_solution, 0.5)]
 
     max_dist = continuous_move_range.convert(0.5)

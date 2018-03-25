@@ -19,8 +19,8 @@ Just write in Python
 ```python
 >>> import metabench as mb
 >>> b = mb.Benchmark(10)
->>> b.add_meta(mb.meta.HillClimbing)
->>> b.add_prob(mb.prob.Sphere, 10)
+>>> b.add_meta(mb.default.HillClimbing)
+>>> b.add_prob(mb.default.Sphere, 10)
 >>> b.run()
 >>> print(b)
 --------------------------------------------------------------

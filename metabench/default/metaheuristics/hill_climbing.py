@@ -6,7 +6,7 @@ Github: https://github.com/ComeBertrand
 Description: Naive implementation of the Hill Climbing algorithm.
 """
 
-from metabench.meta.metaheuristic import SMetaheuristic
+from ...models import SMetaheuristic
 
 
 class HillClimbing(SMetaheuristic):

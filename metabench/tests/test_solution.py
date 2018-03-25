@@ -1,12 +1,12 @@
 import numpy as np
 
-import metabench as mb
-from metabench.tests.fixtures import *
+from .fixtures import *
+from ..common.solution import Solution
 
 
 def test_generation_solution_binary(binary_encoding):
-    s = binary_encoding.generate_random_solution()
-    assert isinstance(s, mb.Solution)
+    s = Solution.generate_random_from_encoding(binary_encoding)
+    assert isinstance(s, Solution)
     assert s.encoding is binary_encoding
     assert s.fitness is None
     assert np.all(s <= 1)
@@ -14,8 +14,8 @@ def test_generation_solution_binary(binary_encoding):
 
 
 def test_generation_solution_discrete(discrete_encoding):
-    s = discrete_encoding.generate_random_solution()
-    assert isinstance(s, mb.Solution)
+    s = Solution.generate_random_from_encoding(discrete_encoding)
+    assert isinstance(s, Solution)
     assert s.encoding is discrete_encoding
     assert s.fitness is None
     assert np.all(s <= MAX_VAL_INT)
@@ -23,8 +23,8 @@ def test_generation_solution_discrete(discrete_encoding):
 
 
 def test_generation_solution_real(real_encoding):
-    s = real_encoding.generate_random_solution()
-    assert isinstance(s, mb.Solution)
+    s = Solution.generate_random_from_encoding(real_encoding)
+    assert isinstance(s, Solution)
     assert s.encoding is real_encoding
     assert s.fitness is None
     assert np.all(s <= MAX_VAL_FLO)
@@ -32,8 +32,8 @@ def test_generation_solution_real(real_encoding):
 
 
 def test_generation_solution_permutation(permutation_encoding):
-    s = permutation_encoding.generate_random_solution()
-    assert isinstance(s, mb.Solution)
+    s = Solution.generate_random_from_encoding(permutation_encoding)
+    assert isinstance(s, Solution)
     assert s.encoding is permutation_encoding
     assert s.fitness is None
     assert set(s) == set(permutation_encoding.items)

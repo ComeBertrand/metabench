@@ -1,8 +1,12 @@
 import pytest
 import numpy as np
 
-import metabench as mb
-
+from ..common.solution import Solution
+from ..common.representation import Boundaries, BinaryEncoding, DiscreteEncoding, RealEncoding, PermutationEncoding
+from ..common.fitness import Modifs
+from ..models.statistics import StatisticsRecorder
+from ..operators.neighborhood import (ContinuousMoveRange, ContinuousLogMoveRange, DiscreteMoveRange,
+                                      DiscreteLogMoveRange)
 
 NB_ATTRIBUTES = 5
 MIN_VAL_INT = 0
@@ -39,7 +43,7 @@ def max_bound_int():
 
 @pytest.fixture
 def boundaries_int(min_bound_int, max_bound_int):
-    return mb.Boundaries(min_bound_int, max_bound_int, type=np.int)
+    return Boundaries(min_bound_int, max_bound_int, type=np.int)
 
 
 @pytest.fixture
@@ -54,7 +58,7 @@ def max_bound_float():
 
 @pytest.fixture
 def boundaries_float(min_bound_float, max_bound_float):
-    return mb.Boundaries(min_bound_float, max_bound_float, type=np.float)
+    return Boundaries(min_bound_float, max_bound_float, type=np.float)
 
 
 @pytest.fixture
@@ -64,42 +68,42 @@ def items():
 
 @pytest.fixture
 def binary_encoding():
-    return mb.BinaryEncoding(NB_ATTRIBUTES)
+    return BinaryEncoding(NB_ATTRIBUTES)
 
 
 @pytest.fixture
 def binary_solution(binary_encoding):
-    return binary_encoding.generate_random_solution()
+    return Solution.generate_random_from_encoding(binary_encoding)
 
 
 @pytest.fixture
 def discrete_encoding(boundaries_int):
-    return mb.DiscreteEncoding(boundaries_int)
+    return DiscreteEncoding(boundaries_int)
 
 
 @pytest.fixture
 def discrete_solution(discrete_encoding):
-    return discrete_encoding.generate_random_solution()
+    return Solution.generate_random_from_encoding(discrete_encoding)
 
 
 @pytest.fixture
 def real_encoding(boundaries_float):
-    return mb.RealEncoding(boundaries_float)
+    return RealEncoding(boundaries_float)
 
 
 @pytest.fixture
 def real_solution(real_encoding):
-    return real_encoding.generate_random_solution()
+    return Solution.generate_random_from_encoding(real_encoding)
 
 
 @pytest.fixture
 def permutation_encoding(items):
-    return mb.PermutationEncoding(items)
+    return PermutationEncoding(items)
 
 
 @pytest.fixture
 def permutation_solution(permutation_encoding):
-    return permutation_encoding.generate_random_solution()
+    return Solution.generate_random_from_encoding(permutation_encoding)
 
 
 @pytest.fixture
@@ -128,7 +132,7 @@ def modifs_double():
 
 @pytest.fixture
 def modifs_as_modifs(modifs):
-    m = mb.Modifs()
+    m = Modifs()
     for index, val_bef, val_aft in modifs:
         m.add_modif(index, val_bef, val_aft)
     return m
@@ -136,7 +140,7 @@ def modifs_as_modifs(modifs):
 
 @pytest.fixture
 def modifs_empty():
-    return mb.Modifs()
+    return Modifs()
 
 
 @pytest.fixture
@@ -151,15 +155,16 @@ def two_type_names_binary_discrete():
 
 @pytest.fixture
 def empty_statistics():
-    return mb.Statistics(NB_RUNS, BASE_SIZE)
+    return StatisticsRecorder(NB_RUNS, BASE_SIZE)
 
 
 @pytest.fixture
 def list_records(binary_encoding):
     full_list_records = []
     for i in range(NB_RUNS):
-        list_solutions = [binary_encoding.generate_random_solution() for
-                          j in range(NB_ITER)]
+        list_solutions = []
+        for j in range(NB_ITER):
+            list_solutions.append(Solution(binary_encoding.generate_random_value(), binary_encoding))
         for f, s in enumerate(list_solutions[::-1]):
             s.fitness = f + i
         full_list_records += [(i, s, t) for t, s in enumerate(list_solutions)]
@@ -187,19 +192,19 @@ def param_creation_all():
 
 @pytest.fixture
 def continuous_move_range():
-    return mb.ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_FLO)
+    return ContinuousMoveRange(MIN_VAL_FLO, MAX_VAL_FLO)
 
 
 @pytest.fixture
 def continuous_log_move_range():
-    return mb.ContinuousLogMoveRange(MIN_VAL_FLO_LMV, MAX_VAL_FLO_LMV)
+    return ContinuousLogMoveRange(MIN_VAL_FLO_LMV, MAX_VAL_FLO_LMV)
 
 
 @pytest.fixture
 def discrete_move_range():
-    return mb.DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_INT)
+    return DiscreteMoveRange(MIN_VAL_INT, MAX_VAL_INT)
 
 
 @pytest.fixture
 def discrete_log_move_range():
-    return mb.DiscreteLogMoveRange(MIN_VAL_INT, MAX_VAL_INT)
+    return DiscreteLogMoveRange(MIN_VAL_INT, MAX_VAL_INT)

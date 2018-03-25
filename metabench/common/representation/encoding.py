@@ -11,94 +11,7 @@ from functools import reduce
 
 import numpy as np
 
-from metabench.prob.solution import Solution
-
-
-class Boundaries(np.ndarray):
-    """Represent the limit of the space for the attribute of a solution.
-
-    A boundaries records the minimum and maximum values that a solution
-    can take for each of its attribute.
-    These values may be of any numeric type (int or float).
-
-    Boundaries can also be used to normalize a solution vector, so that
-    distance computation is accurate.
-
-    Boundaries have always the same shape, it is a matrix of 3 lines and
-    n columns (n being the number of attribute of the solutions).
-    - The 1st line records the minimum values for the attributes (included).
-    - The 2nd line records the maximum values for the attributes (included).
-    - The 3td line records the difference between the maximum and the
-    minimum values. This is the space size of each attribute used for
-    the normalization of solution vectors.
-
-    Of course, for a specific attribute the minimum value must always be
-    lower or equal to the maximum value.
-
-    Args:
-        minimums (list): of minimum values.
-        maximums (list): of maximum values.
-        type (type): type of the values, default is np.int.
-
-    Returns:
-        np.array: of shape (3, n), n being the size of the minimums/maximums
-            vectors.
-
-    """
-    def __new__(cls, minimums, maximums, type=np.int):
-        len_minimums = len(minimums)
-        if len_minimums != len(maximums):
-            raise ValueError('Length of minimums and maximums are unequal')
-
-        err_indexes = []
-        for i in range(len_minimums):
-            if maximums[i] < minimums[i]:
-                err_indexes.append(i)
-        if err_indexes:
-            raise ValueError('Maximum bounding values are inferior to the '
-                             'minimum bounding value at the following indexes '
-                             ': {}'.format(err_indexes))
-
-        # Add epsilon to avoid division per 0 when max == min during
-        # normalization.
-        epsilon = np.finfo(np.float).resolution
-        bounds = np.array([minimums,
-                           maximums,
-                           (maximums-minimums) + epsilon],
-                          type)
-        obj = np.asarray(bounds).view(cls)
-        return obj
-
-    def max_val(self, index):
-        """Get the maximum value authorized for an index."""
-        return self.__getitem__((1, index))
-
-    def max_vals(self):
-        """Get all the maximum values authorized for the attributes."""
-        return self.__getitem__(1)
-
-    def min_val(self, index):
-        """Get the minimum value authorized for an index."""
-        return self.__getitem__((0, index))
-
-    def min_vals(self):
-        """Get all the minimum values authorized for the attributes."""
-        return self.__getitem__(0)
-
-    def normalize(self, array):
-        """Normalize an array according to the space size of its attributes.
-
-        Normally used on the difference between two solution to compute
-        an accurate distance.
-
-        Args:
-            array (np.array): array to be normalized.
-
-        Returns:
-            np.array: normalized array.
-
-        """
-        return array / self.__getitem__(2)
+from .boundaries import Boundaries
 
 
 class Encoding(object):
@@ -130,11 +43,11 @@ class Encoding(object):
         self.boundaries = boundaries
         self.ord = ord
 
-    def generate_random_solution(self):
+    def generate_random_value(self):
         """Generate a random candidate solution.
 
         Returns:
-            Solution: A random solution array.
+            np.nd_array: A random array in the solution space.
 
         """
         raise NotImplementedError('Abstract Class')
@@ -202,18 +115,16 @@ class BinaryEncoding(Encoding):
 
         self.size = size
 
-    def generate_random_solution(self):
+    def generate_random_value(self):
         """Generate a random solution.
 
         Randomly create a binary array with uniform distribution.
 
         Returns:
-            Solution: A random solution array.
+            np.nd_array: A random array of binary values.
 
         """
-        values = np.random.randint(2, size=self.size)
-        solution = Solution(values, self)
-        return solution
+        return np.random.randint(2, size=self.size)
 
     def space_size(self):
         return 2 ** self.size
@@ -236,22 +147,21 @@ class DiscreteEncoding(Encoding):
                             " type int")
         super().__init__(boundaries, ord=1)
 
-    def generate_random_solution(self):
+    def generate_random_value(self):
         """Generate a random solution.
 
         Randomly create an integer array with uniform distribution on the
         solution space of each index.
 
         Returns:
-            Solution: A random solution array.
+            np.nd_array: A random array of int.
 
         """
         values = np.zeros(self.boundaries.shape[1], np.int)
         for i in range(self.boundaries.shape[1]):
             values[i] = np.random.random_integers(self.boundaries[0][i],
                                                   self.boundaries[1][i])
-        solution = Solution(values, self)
-        return solution
+        return values
 
     def space_size(self):
         space_size = reduce(lambda x, y: x*y, self.boundaries[2] + 1)
@@ -275,22 +185,21 @@ class RealEncoding(Encoding):
                             " type float")
         super().__init__(boundaries, ord=2)
 
-    def generate_random_solution(self):
+    def generate_random_value(self):
         """Generate a random solution.
 
-        Randomly create an integer array with uniform distribution on the
+        Randomly create an float array with uniform distribution on the
         solution space of each index.
 
         Returns:
-            Solution: A random solution array.
+            np.nd_array: A random array of float.
 
         """
         values = np.zeros(self.boundaries.shape[1], np.float)
         for i in range(self.boundaries.shape[1]):
             values[i] = np.random.uniform(self.boundaries[0][i],
                                           self.boundaries[1][i])
-        solution = Solution(values, self)
-        return solution
+        return values
 
 
 class PermutationEncoding(Encoding):
@@ -309,19 +218,18 @@ class PermutationEncoding(Encoding):
         super().__init__()
         self.items = np.array(items)
 
-    def generate_random_solution(self):
+    def generate_random_value(self):
         """Generate a random solution.
 
         Randomly create a permutation of the items.
 
         Returns:
-            Solution: A random solution array.
+            np.nd_array: A random array.
 
         """
         values = np.array(self.items, copy=True)
         np.random.shuffle(values)
-        solution = Solution(values, self)
-        return solution
+        return values
 
     def space_size(self):
         return math.factorial(len(self.items))

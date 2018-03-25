@@ -1,16 +1,16 @@
 import pytest
 import numpy as np
 
-import metabench as mb
-from metabench.tests.fixtures import *
+from .fixtures import *
+from ..models.statistics import StatisticsRecorder
 
 
 def test_statistics_creation():
-    mb.Statistics(NB_RUNS, BASE_SIZE)
+    StatisticsRecorder(NB_RUNS, BASE_SIZE)
     with pytest.raises(ValueError):
-        mb.Statistics(NB_RUNS_FALSE, BASE_SIZE)
+        StatisticsRecorder(NB_RUNS_FALSE, BASE_SIZE)
     with pytest.raises(ValueError):
-        mb.Statistics(NB_RUNS, BASE_SIZE_FALSE)
+        StatisticsRecorder(NB_RUNS, BASE_SIZE_FALSE)
 
 
 def test_empty_statistics(empty_statistics):

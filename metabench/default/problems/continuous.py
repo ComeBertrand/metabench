@@ -10,16 +10,16 @@ https://www.sfu.ca/~ssurjano/optimization.html
 
 import numpy as np
 
-from metabench.prob.problem import Problem
-from metabench.prob.encoding import RealEncoding, Boundaries
-from metabench.prob.objective import Objective
-from metabench.prob.operators.neighborhood import (Neighborhood,
-                                                   move_distance_continuous,
-                                                   ContinuousLogMoveRange)
+from ...models import Problem
+from ...common.representation import RealEncoding, Boundaries
+from ...common.fitness import Objective
+from ...operators.neighborhood import NeighborhoodGenerator, move_distance_continuous, ContinuousLogMoveRange
 
 
 class ContinuousProblem(Problem):
     """Problems that are defined by a continuous function.
+
+    # TODO: Do it in a more abstract way and move it in abstract
 
     Args:
         n_dim (int): Number of dimensions.
@@ -31,19 +31,13 @@ class ContinuousProblem(Problem):
 
     """
     def __init__(self, n_dim, min_vals, max_vals, move_range, known_min):
-        nb_neighbors = n_dim * 100
-        neighborhood = Neighborhood(move_distance_continuous,
-                                    move_range,
-                                    nb_neighbors)
-        boundaries = Boundaries(min_vals,
-                                max_vals,
-                                np.float)
+        nb_neighbors = n_dim * 100 # TODO: shall be an argument of the object
+        neighborhood = NeighborhoodGenerator(move_distance_continuous, move_range, nb_neighbors)
+        boundaries = Boundaries(min_vals, max_vals, np.float)
         encoding = RealEncoding(boundaries)
         objective = Objective(self._eval_func)
-        super().__init__(objective,
-                         encoding,
-                         neighborhood=neighborhood,
-                         known_min=known_min)
+
+        super().__init__(objective, encoding, neighborhood=neighborhood, known_min=known_min)
 
     def _eval_func(self, solution):
         """Actual evaluation of a solution by the continuous function.
