@@ -8,7 +8,10 @@ metaheuristics on one or several problems.
 """
 
 from time import clock
+from collections import defaultdict
+from itertools import product
 
+from ..display import draw_benchmark_statistics
 from .statistics import StatisticsRecorder
 
 
@@ -18,7 +21,7 @@ class Benchmark(object):
         self._nb_runs = nb_runs
         self._metaheuristics = []
         self._problems = []
-        self._results = []
+        self._results = defaultdict(lambda: defaultdict())
 
     def add_meta(self, metaheuristic_class, *args, **kwargs):
         """Add a metaheuristic to the Benchmark.
@@ -43,16 +46,14 @@ class Benchmark(object):
     def run(self):
         """Compute the Benchmark."""
         # TODO: add tqdm for time of computation
-        self._results = []
-        for i in range(len(self._problems)):
-            for j in range(len(self._metaheuristics)):
-                self._results.append((i, j, StatisticsRecorder(self._nb_runs)))
+        self._results = defaultdict(lambda: defaultdict())
 
-        for k in range(len(self._results)):
-            self._compute(k)
+        for i, j in product(range(len(self._problems)), range(len(self._metaheuristics))):
+            self._results[i][j] = StatisticsRecorder(self._nb_runs, self._problems[i][0], self._metaheuristics[j][0])
+            self._compute(i, j)
 
-    def _compute(self, index):
-        index_prob, index_meta, stats = self._results[index]
+    def _compute(self, index_prob, index_meta):
+        stats = self._results[index_prob][index_meta]
 
         prob = self._problems[index_prob]
         meta = self._metaheuristics[index_meta]
@@ -79,24 +80,29 @@ class Benchmark(object):
             diff_t_run = clock() - t_run
             stats.record_time_computation(i, diff_t_run)
 
+    def display(self):
+        draw_benchmark_statistics(self._results)
+
     def __str__(self):
         line = "".join(["-"]*62) + "\n"
         b_str = ""
         b_str += line
         b_str += "|{}|\n".format("METABENCH".center(60))
         b_str += line
-        for index_prob, index_meta, stats in self._results:
-            prob = self._problems[index_prob]
-            meta = self._metaheuristics[index_meta]
-            prob_class, prob_attributes, prob_key_attributes = prob
-            meta_class, meta_attributes, meta_key_attributes = meta
-            b_str += line
-            b_str += "|{}|\n".format(" Problem : {}".format(
-                prob_class.__name__).center(60))
-            b_str += "|{}|\n".format(" Meta : {}".format(
-                meta_class.__name__).center(60))
-            b_str += "|{}|\n".format(" Nb runs : {:d}".format(
-                self._nb_runs).center(60))
-            b_str += line
-            b_str += str(stats)
+        for index_prob in self._results:
+            for index_meta in self._results[index_prob]:
+                stats = self._results[index_prob][index_meta]
+                prob = self._problems[index_prob]
+                meta = self._metaheuristics[index_meta]
+                prob_class, prob_attributes, prob_key_attributes = prob
+                meta_class, meta_attributes, meta_key_attributes = meta
+                b_str += line
+                b_str += "|{}|\n".format(" Problem : {}".format(
+                    prob_class.__name__).center(60))
+                b_str += "|{}|\n".format(" Meta : {}".format(
+                    meta_class.__name__).center(60))
+                b_str += "|{}|\n".format(" Nb runs : {:d}".format(
+                    self._nb_runs).center(60))
+                b_str += line
+                b_str += str(stats)
         return b_str
