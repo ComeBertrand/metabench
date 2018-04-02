@@ -23,9 +23,8 @@ class Metaheuristic(object):
         self.problem = problem
         self.solution = None
 
-    @property
     @classmethod
-    def name(cls):
+    def get_name(cls):
         return cls.__name__
 
     def run(self):

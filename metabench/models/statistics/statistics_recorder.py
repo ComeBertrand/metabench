@@ -166,6 +166,12 @@ class StatisticsRecorder(object):
         return None
 
     @property
+    def times_iter(self):
+        if self._nb_iter_tot:
+            return self._time[:self._nb_iter_tot]
+        return None
+
+    @property
     def best_time_iter(self):
         if self._nb_iter_tot:
             return np.amin(self._time[:self._nb_iter_tot])
@@ -187,6 +193,12 @@ class StatisticsRecorder(object):
     def std_time_iter(self):
         if self._nb_iter_tot:
             return np.std(self._time[:self._nb_iter_tot])
+        return None
+
+    @property
+    def time_tots(self):
+        if np.any(self._time_tot):
+            return self._time_tot
         return None
 
     @property

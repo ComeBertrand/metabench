@@ -39,9 +39,8 @@ class Problem(object):
         self.known_min = known_min
         self.neighborhood = neighborhood
 
-    @property
     @classmethod
-    def name(cls):
+    def get_name(cls):
         return cls.__name__
 
     def evaluate(self, solution, modifs=None):
