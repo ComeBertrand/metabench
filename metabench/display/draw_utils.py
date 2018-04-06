@@ -6,27 +6,38 @@ Github: https://github.com/ComeBertrand
 Description: bokeh drawings utilities.
 """
 
+from itertools import chain
+
 import numpy as np
 from bokeh import palettes
-from bokeh.plotting import figure, show
+from bokeh.plotting import figure, show, ColumnDataSource
 from bokeh.layouts import gridplot
+from bokeh.models import HoverTool
 
 
-def create_multiline_graph(title, y_axis_label, x_axis_label, x_range, y_values_per_line, y_labels):
-    f = figure(title=title, y_axis_label=y_axis_label, x_axis_label=x_axis_label)
+def create_multiline_graph(title, y_axis_label, x_axis_label, x_range, y_values_per_line, y_labels, label_name):
+    hover = HoverTool(tooltips=[(label_name, '@label')])
+    f = figure(title=title, y_axis_label=y_axis_label, x_axis_label=x_axis_label, tools=[hover])
 
     colors = []
-    if len(y_values_per_line) <= 2:
-        colors = palettes.d3['Category10'][3]
-    elif len(y_values_per_line) <= 10:
-        colors = palettes.d3['Category10'][len(y_values_per_line)]
-    elif len(y_values_per_line) <= 20:
-        colors = palettes.d3['Category20'][len(y_values_per_line)]
-    # TODO: Handle more than 20 categories
+    nb_palette = len(y_values_per_line) // 20
+    colors = [color for color in chain(nb_palette * palettes.d3['Category20'][20])]
+    remaining = len(y_values_per_line) % 20
+    if remaining <= 2:
+        colors += palettes.d3['Category10'][3]
+    elif remaining <= 10:
+        colors += palettes.d3['Category10'][len(y_values_per_line)]
+    elif remaining <= 20:
+        colors += palettes.d3['Category20'][len(y_values_per_line)]
 
     for i, y_values in enumerate(y_values_per_line):
-        f.line(x_range, y_values, legend=y_labels[i], line_color=colors[i])
-        f.circle(x_range, y_values, legend=y_labels[i], line_color=colors[i],
+        source = ColumnDataSource(data=dict(
+            x=x_range,
+            y=y_values,
+            label=y_values
+        ))
+        f.line('x', 'y', source=source, legend=y_labels[i], line_color=colors[i])
+        f.circle('x', 'y', source=source, legend=y_labels[i], line_color=colors[i],
                  fill_color='white', size=8)
 
     return f
@@ -89,7 +100,7 @@ def draw_best_values_per_meta(list_statistics):
     y_labels = ["{}-{:d}".format(stats.metaheuristic.get_name(), i) for i, stats in enumerate(list_statistics)]
     best_values_per_meta = [stats.best_values for stats in list_statistics]
 
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, best_values_per_meta, y_labels),
+    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, best_values_per_meta, y_labels, 'Fitness'),
             create_box_plot(title, y_axis_label, y_labels, best_values_per_meta))
 
 
@@ -111,7 +122,7 @@ def draw_time_per_run_per_meta(list_statistics):
 
     times_run_per_meta = [stats.time_tots for stats in list_statistics]
 
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, times_run_per_meta, y_labels),
+    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, times_run_per_meta, y_labels, 'Computation time (s)'),
             create_box_plot(title, y_axis_label, y_labels, times_run_per_meta))
 
 
@@ -133,7 +144,7 @@ def draw_nb_iteration_per_meta(list_statistics):
 
     nb_run_per_meta = [stats.nb_iter_per_run for stats in list_statistics]
 
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, nb_run_per_meta, y_labels),
+    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, nb_run_per_meta, y_labels, 'Number of iterations'),
             create_box_plot(title, y_axis_label, y_labels, nb_run_per_meta))
 
 
