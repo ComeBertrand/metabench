@@ -22,7 +22,7 @@ class Benchmark(object):
         self._nb_runs = nb_runs
         self._metaheuristics = []
         self._problems = []
-        self._results = defaultdict(lambda: defaultdict())
+        self._results = []
 
     def dump(self, file_name):
         with open(file_name, 'wb') as f:
@@ -59,11 +59,13 @@ class Benchmark(object):
     def run(self):
         """Compute the Benchmark."""
         # TODO: add tqdm for time of computation
-        self._results = defaultdict(lambda: defaultdict())
+        self._results = []
 
-        for i, j in product(range(len(self._problems)), range(len(self._metaheuristics))):
-            self._results[i][j] = StatisticsRecorder(self._nb_runs, self._problems[i][0], self._metaheuristics[j][0])
-            self._compute(i, j)
+        for i, prob_data in enumerate(self._problems):
+            self._results.append([])
+            for j, meta_data in enumerate(self._metaheuristics):
+                self._results[i].append(StatisticsRecorder(self._nb_runs, prob_data[0], meta_data[0]))
+                self._compute(i, j)
 
     def _compute(self, index_prob, index_meta):
         stats = self._results[index_prob][index_meta]

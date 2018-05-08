@@ -3,4 +3,4 @@ numpy==1.11.2
 pylint===1.8.3
 pytest==3.0.4
 pytest-cov==2.4.0
-bokeh===0.12.14
+bokeh===0.12.5

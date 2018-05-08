@@ -150,9 +150,8 @@ def draw_nb_iteration_per_meta(list_statistics):
 
 def draw_benchmark_statistics(statistics_per_meta_and_problem_index):
     all_figures = []
-    for _, stats_per_meta_index in statistics_per_meta_and_problem_index.items():
+    for all_meta_stats in statistics_per_meta_and_problem_index:
         # TODO: create a numpy array and remove for loop from above functions
-        all_meta_stats = list(stats_per_meta_index.values())
         for func in [draw_best_values_per_meta, draw_time_per_run_per_meta, draw_nb_iteration_per_meta]:
             line_figure, box_figure = func(all_meta_stats)
             all_figures.append(line_figure)
