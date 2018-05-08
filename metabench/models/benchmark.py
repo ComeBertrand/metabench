@@ -7,6 +7,7 @@ Description: A Benchmark is a performance study of one or several
 metaheuristics on one or several problems.
 """
 
+import pickle
 from time import clock
 
 from .statistics import StatisticsRecorder
@@ -19,6 +20,18 @@ class Benchmark(object):
         self._metaheuristics = []
         self._problems = []
         self._results = []
+
+    def dump(self, file_name):
+        with open(file_name, 'wb') as f:
+            pickle.dump(self, f)
+
+    @staticmethod
+    def load(file_name):
+        with open(file_name, 'rb') as f:
+            result = pickle.load(f)
+            if not isinstance(result, Benchmark):
+                raise ValueError("The given file is not a dumped Benchmark")
+            return result
 
     def add_meta(self, metaheuristic_class, *args, **kwargs):
         """Add a metaheuristic to the Benchmark.
