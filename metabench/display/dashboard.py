@@ -7,7 +7,7 @@ Description: dashboard drawing functions.
 """
 
 from bokeh.layouts import layout
-from bokeh.models.widgets import Panel, Tabs, Div
+from bokeh.models.widgets import Panel, Tabs, Div, Select
 
 
 def create_benchmark_dashboard(statistics_per_problem_per_meta):
@@ -37,6 +37,8 @@ def create_dashboard_header(statistics_per_meta):
 
 
 def create_meta_comparison(statistics_per_meta):
+    title = Div(text="""<h3>Metaheuristics comparison :</h3>""")
+    select = Select(title="Show:", value="Fitness", options=["Result fitness", "Computation time"])
     return None
 
 
