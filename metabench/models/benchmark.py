@@ -12,7 +12,9 @@ from time import clock
 from collections import defaultdict
 from itertools import product
 
-from ..display import draw_benchmark_statistics
+from bokeh.plotting import show
+
+from ..display import create_benchmark_dashboard
 from .statistics import StatisticsRecorder
 
 
@@ -96,7 +98,8 @@ class Benchmark(object):
             stats.record_time_computation(i, diff_t_run)
 
     def display(self):
-        draw_benchmark_statistics(self._results)
+        dashboard = create_benchmark_dashboard(self._results)
+        show(dashboard)
 
     def __str__(self):
         line = "".join(["-"]*62) + "\n"

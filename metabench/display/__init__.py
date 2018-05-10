@@ -1,1 +1,2 @@
 from .draw_utils import draw_benchmark_statistics
+from .dashboard import create_benchmark_dashboard
