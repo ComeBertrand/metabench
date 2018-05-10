@@ -25,18 +25,26 @@ def create_benchmark_dashboard(statistics_per_problem_per_meta):
 
 
 def create_problem_dashboard(statistics_per_meta):
-    header = create_dashboard_header(statistics_per_meta)
+    problem_name = statistics_per_meta[0].problem.get_name()
+
+    header = create_dashboard_header(problem_name, statistics_per_meta)
     overall_comparison = create_meta_comparison(statistics_per_meta)
     meta_dashboards = create_meta_dashboards(statistics_per_meta)
-
-    problem_name = statistics_per_meta[0].problem.get_name()
 
     return problem_name, layout([[header], [overall_comparison], [meta_dashboards]])
 
 
-def create_dashboard_header(statistics_per_meta):
-    problem_header = Div(text="""Problem Header""")
-    meta_header = Div(text="""Meta Header""")
+def create_dashboard_header(problem_name, statistics_per_meta):
+    problem_header = Div(text="""
+        <span><h3>Problem :</h3> {}</span>
+    """.format(problem_name))
+
+    meta_header_text = "<span><h3>Metaheuristics :</h3></span><ol>"
+    for meta_stat in statistics_per_meta:
+        meta_name = meta_stat.metaheuristic.get_name()
+        meta_header_text += "<li>{}</li>".format(meta_name)
+    meta_header_text += "</ol>"
+    meta_header = Div(text=meta_header_text)
     return layout([[problem_header, meta_header]])
 
 
