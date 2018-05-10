@@ -15,66 +15,64 @@ from bokeh.layouts import gridplot
 from bokeh.models import HoverTool
 
 
-def create_multiline_graph(title, y_axis_label, x_axis_label, x_range, y_values_per_line, y_labels, label_name):
-    hover = HoverTool(tooltips=[(label_name, '@label')])
-    f = figure(title=title, y_axis_label=y_axis_label, x_axis_label=x_axis_label, tools=[hover])
+def create_box_plot(title, y_axis_label, categories, categories_values, value_formatter=None):
+    if value_formatter is None:
+        value_formatter = lambda x: x
 
-    colors = []
-    nb_palette = len(y_values_per_line) // 20
-    colors = [color for color in chain(nb_palette * palettes.d3['Category20'][20])]
-    remaining = len(y_values_per_line) % 20
-    if remaining <= 2:
-        colors += palettes.d3['Category10'][3]
-    elif remaining <= 10:
-        colors += palettes.d3['Category10'][len(y_values_per_line)]
-    elif remaining <= 20:
-        colors += palettes.d3['Category20'][len(y_values_per_line)]
-
-    for i, y_values in enumerate(y_values_per_line):
-        source = ColumnDataSource(data=dict(
-            x=x_range,
-            y=y_values,
-            label=y_values
-        ))
-        f.line('x', 'y', source=source, legend=y_labels[i], line_color=colors[i])
-        f.circle('x', 'y', source=source, legend=y_labels[i], line_color=colors[i],
-                 fill_color='white', size=8)
-
-    return f
-
-
-def create_box_plot(title, y_axis_label, categories, categories_values):
-    meta_names = []
-    lows = []
-    highs = []
-    q1 = []
-    q2 = []
-    q3 = []
+    raw_data = {
+        'min': [],
+        'max': [],
+        'q1': [],
+        'q2': [],
+        'q3': [],
+        'avg': [],
+        'std': []
+    }
 
     for category_values in categories_values:
-        lows.append(np.amin(category_values))
-        highs.append(np.amax(category_values))
+        raw_data['min'].append(np.amin(category_values))
+        raw_data['max'].append(np.amax(category_values))
 
-        q1.append(np.percentile(category_values, 25))
-        q2.append(np.percentile(category_values, 50))
-        q3.append(np.percentile(category_values, 75))
+        raw_data['q1'].append(np.percentile(category_values, 25))
+        raw_data['q2'].append(np.percentile(category_values, 50))
+        raw_data['q3'].append(np.percentile(category_values, 75))
+
+        raw_data['avg'].append(np.mean(category_values))
+        raw_data['std'].append(np.std(category_values))
+
+    format_data = {}
+    for key, value in raw_data.items():
+        new_key = '{}_fmt'.format(key)
+        format_data[new_key] = [value_formatter(item) for item in value]
+
+    raw_data.update(format_data)
+    raw_data['categories'] = categories
+
+    data_source = ColumnDataSource(data=raw_data)
 
     f = figure(title=title,
                y_axis_label=y_axis_label,
                background_fill_color="#EFE8E2",
                x_range=categories)
 
-    f.segment(categories, highs, categories, q3, line_color='black')
-    f.segment(categories, lows, categories, q1, line_color='black')
+    f.segment(categories, raw_data['max'], categories, raw_data['q3'], line_color='black')
+    f.segment(categories, raw_data['min'], categories, raw_data['q1'], line_color='black')
 
     # boxes
-    f.vbar(categories, 0.7, q2, q3, fill_color="#E08E79", line_color="black")
-    f.vbar(categories, 0.7, q1, q2, fill_color="#3B8686", line_color="black")
+    bar_high = f.vbar(x='categories', width=0.7, bottom='q2', top='q3', source=data_source, fill_color="#E08E79",
+                      line_color="black")
+    bar_low = f.vbar(x='categories', width=0.7, bottom='q1', top='q2', source=data_source, fill_color="#3B8686",
+                     line_color="black")
 
     # whiskers (almost-0 height rects simpler than segments)
-    whiskers_height = min([q3[i] - q1[i] for i in range(len(q3))]) / 1000
-    f.rect(categories, lows, 0.2, whiskers_height, line_color="black")
-    f.rect(categories, highs, 0.2, whiskers_height, line_color="black")
+    whiskers_height = min([raw_data['max'][i] - raw_data['min'][i] for i in range(len(raw_data['max']))]) / 1000
+    f.rect(categories, raw_data['min'], 0.2, whiskers_height, line_color="black")
+    f.rect(categories, raw_data['max'], 0.2, whiskers_height, line_color="black")
+
+    hover = HoverTool(tooltips=[('Max', '@max_fmt'), ('3td Quartile', '@q3_fmt'), ('Median', '@q2_fmt'),
+                                ('1st Quartile', '@q1_fmt'), ('Min', '@min_fmt'), ('Avg', '@avg_fmt'), ('Std', '@std_fmt')],
+                      renderers=[bar_high, bar_low])
+    f.add_tools(hover)
 
     f.xgrid.grid_line_color = None
     f.ygrid.grid_line_color = "white"
@@ -84,77 +82,52 @@ def create_box_plot(title, y_axis_label, categories, categories_values):
     return f
 
 
-def draw_best_values_per_meta(list_statistics):
-    if not list_statistics:
-        raise ValueError("No statistics to display")
 
-    if len(set(stats.problem for stats in list_statistics)) != 1:
-        raise ValueError("All statistics must be on the same problem")
+def create_hovered_multiline_graph(title, x_axis_label, y_axis_label, data_sources, hover_data, legend):
+    f = figure(title=title, x_axis_label=x_axis_label, y_axis_label=y_axis_label)
 
-    problem = list_statistics[0].problem
-    title = "Best runs for problem {}".format(problem.get_name())
-    y_axis_label = "Fitness"
-    x_axis_label = "Runs"
-    x_range = range(1, len(list_statistics[0].best_values) + 1)
+    nb_lines = len(data_sources)
+    colors = get_colors(nb_lines)
 
-    y_labels = ["{}-{:d}".format(stats.metaheuristic.get_name(), i) for i, stats in enumerate(list_statistics)]
-    best_values_per_meta = [stats.best_values for stats in list_statistics]
+    circle_glyphs = []
+    for i, data_source in enumerate(data_sources):
+        item_kwargs = {'line_color': colors[i]}
+        if legend:
+            item_kwargs['legend'] = legend[i]
 
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, best_values_per_meta, y_labels, 'Fitness'),
-            create_box_plot(title, y_axis_label, y_labels, best_values_per_meta))
+        f.line('x', 'y', source=data_source, **item_kwargs)
+        circle_glyphs.append(f.circle('x', 'y', source=data_source, fill_color='white', size=8, **item_kwargs))
 
+    # Hover only on the circles
+    hover = HoverTool(renderers=circle_glyphs, tooltips=hover_data, mode='vline')
+    f.add_tools(hover)
+    f.legend.click_policy = 'hide'
 
-def draw_time_per_run_per_meta(list_statistics):
-    if not list_statistics:
-        raise ValueError("No statistics to display")
-
-    if len(set(stats.problem for stats in list_statistics)) != 1:
-        raise ValueError("All statistics must be on the same problem")
-
-    problem = list_statistics[0].problem
-
-    title = "Time per run for problem {}".format(problem.get_name())
-    y_axis_label = "Computation time (in s)"
-    x_axis_label = "Runs"
-
-    x_range = range(1, len(list_statistics[0].time_tots) + 1)
-    y_labels = ["{}-{:d}".format(stats.metaheuristic.get_name(), i) for i, stats in enumerate(list_statistics)]
-
-    times_run_per_meta = [stats.time_tots for stats in list_statistics]
-
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, times_run_per_meta, y_labels, 'Computation time (s)'),
-            create_box_plot(title, y_axis_label, y_labels, times_run_per_meta))
+    return f
 
 
-def draw_nb_iteration_per_meta(list_statistics):
-    if not list_statistics:
-        raise ValueError("No statistics to display")
+def create_hovered_single_line_graph(title, x_axis_label, y_axis_label, data_source, hover_data):
+    hover = HoverTool(tooltips=hover_data, mode='vline')
+    f = figure(title=title, x_axis_label=x_axis_label, y_axis_label=y_axis_label)
+    f.add_tools(hover)
 
-    if len(set(stats.problem for stats in list_statistics)) != 1:
-        raise ValueError("All statistics must be on the same problem")
+    color = get_colors(1)[0]
 
-    problem = list_statistics[0].problem
+    f.line('x', 'y', source=data_source, line_color=color)
 
-    title = "Nb of iteration for problem {}".format(problem.get_name())
-    y_axis_label = "Nb iterations"
-    x_axis_label = "Runs"
-
-    x_range = range(1, len(list_statistics[0].nb_iter_per_run) + 1)
-    y_labels = ["{}-{:d}".format(stats.metaheuristic.get_name(), i) for i, stats in enumerate(list_statistics)]
-
-    nb_run_per_meta = [stats.nb_iter_per_run for stats in list_statistics]
-
-    return (create_multiline_graph(title, y_axis_label, x_axis_label, x_range, nb_run_per_meta, y_labels, 'Number of iterations'),
-            create_box_plot(title, y_axis_label, y_labels, nb_run_per_meta))
+    return f
 
 
-def draw_benchmark_statistics(statistics_per_meta_and_problem_index):
-    all_figures = []
-    for all_meta_stats in statistics_per_meta_and_problem_index:
-        # TODO: create a numpy array and remove for loop from above functions
-        for func in [draw_best_values_per_meta, draw_time_per_run_per_meta, draw_nb_iteration_per_meta]:
-            line_figure, box_figure = func(all_meta_stats)
-            all_figures.append(line_figure)
-            all_figures.append(box_figure)
+def get_colors(nb_lines):
+    colors = []
+    nb_palette = nb_lines // 20
+    colors = [color for color in chain(nb_palette * palettes.d3['Category20'][20])]
+    remaining = nb_lines % 20
+    if remaining <= 2:
+        colors += palettes.d3['Category10'][3]
+    elif remaining <= 10:
+        colors += palettes.d3['Category10'][len(y_values_per_line)]
+    elif remaining <= 20:
+        colors += palettes.d3['Category20'][len(y_values_per_line)]
 
-    show(gridplot(all_figures, ncols=2))
+    return colors

@@ -135,6 +135,13 @@ class StatisticsRecorder(object):
     def nb_iter_total(self):
         return self._nb_iter_tot
 
+
+    def get_run_nb_iterations(self, run_index):
+        return self._nb_iter[run_index]
+
+    def get_run_values(self, run_index):
+        return self._values[run_index]
+
     @property
     def best_values(self):
         return np.array([self._values[i][max_iter - 1] for i, max_iter
