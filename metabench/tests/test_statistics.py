@@ -5,12 +5,12 @@ from .fixtures import *
 from ..models.statistics import StatisticsRecorder
 
 
-def test_statistics_creation():
-    StatisticsRecorder(NB_RUNS, BASE_SIZE)
+def test_statistics_creation(problem_class, metaheuristic_class):
+    StatisticsRecorder(NB_RUNS, problem_class, metaheuristic_class, BASE_SIZE)
     with pytest.raises(ValueError):
-        StatisticsRecorder(NB_RUNS_FALSE, BASE_SIZE)
+        StatisticsRecorder(NB_RUNS_FALSE, problem_class, metaheuristic_class, BASE_SIZE)
     with pytest.raises(ValueError):
-        StatisticsRecorder(NB_RUNS, BASE_SIZE_FALSE)
+        StatisticsRecorder(NB_RUNS, problem_class, metaheuristic_class, BASE_SIZE_FALSE)
 
 
 def test_empty_statistics(empty_statistics):

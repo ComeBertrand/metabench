@@ -4,6 +4,7 @@ import numpy as np
 from ..common.solution import Solution
 from ..common.representation import Boundaries, BinaryEncoding, DiscreteEncoding, RealEncoding, PermutationEncoding
 from ..common.fitness import Modifs
+from ..models import Metaheuristic, Problem
 from ..models.statistics import StatisticsRecorder
 from ..operators.neighborhood import (ContinuousMoveRange, ContinuousLogMoveRange, DiscreteMoveRange,
                                       DiscreteLogMoveRange)
@@ -154,8 +155,22 @@ def two_type_names_binary_discrete():
 
 
 @pytest.fixture
-def empty_statistics():
-    return StatisticsRecorder(NB_RUNS, BASE_SIZE)
+def metaheuristic_class():
+    class TestMeta(Metaheuristic):
+        pass
+    return TestMeta
+
+
+@pytest.fixture
+def problem_class():
+    class TestProblem(Problem):
+        pass
+    return TestProblem
+
+
+@pytest.fixture
+def empty_statistics(metaheuristic_class, problem_class):
+    return StatisticsRecorder(NB_RUNS, problem_class, metaheuristic_class, BASE_SIZE)
 
 
 @pytest.fixture
