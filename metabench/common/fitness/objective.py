@@ -6,8 +6,6 @@ Github: https://github.com/ComeBertrand
 Description: Wrappers for the fitness functions.
 """
 
-from .modif import Modifs
-
 
 class Objective(object):
     """Wrapper for the fitness functions.
