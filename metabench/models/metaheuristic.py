@@ -23,6 +23,10 @@ class Metaheuristic(object):
         self.problem = problem
         self.solution = None
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
     def run(self):
         """Compute to find the best solution of the problem.
 

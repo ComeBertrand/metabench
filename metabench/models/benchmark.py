@@ -9,7 +9,12 @@ metaheuristics on one or several problems.
 
 import pickle
 from time import clock
+from collections import defaultdict
+from itertools import product
 
+from bokeh.plotting import show
+
+from ..display import create_benchmark_dashboard
 from .statistics import StatisticsRecorder
 
 
@@ -57,15 +62,15 @@ class Benchmark(object):
         """Compute the Benchmark."""
         # TODO: add tqdm for time of computation
         self._results = []
-        for i in range(len(self._problems)):
-            for j in range(len(self._metaheuristics)):
-                self._results.append((i, j, StatisticsRecorder(self._nb_runs)))
 
-        for k in range(len(self._results)):
-            self._compute(k)
+        for i, prob_data in enumerate(self._problems):
+            self._results.append([])
+            for j, meta_data in enumerate(self._metaheuristics):
+                self._results[i].append(StatisticsRecorder(self._nb_runs, prob_data[0], meta_data[0]))
+                self._compute(i, j)
 
-    def _compute(self, index):
-        index_prob, index_meta, stats = self._results[index]
+    def _compute(self, index_prob, index_meta):
+        stats = self._results[index_prob][index_meta]
 
         prob = self._problems[index_prob]
         meta = self._metaheuristics[index_meta]
@@ -92,24 +97,30 @@ class Benchmark(object):
             diff_t_run = clock() - t_run
             stats.record_time_computation(i, diff_t_run)
 
+    def display(self):
+        dashboard = create_benchmark_dashboard(self._results)
+        show(dashboard)
+
     def __str__(self):
         line = "".join(["-"]*62) + "\n"
         b_str = ""
         b_str += line
         b_str += "|{}|\n".format("METABENCH".center(60))
         b_str += line
-        for index_prob, index_meta, stats in self._results:
-            prob = self._problems[index_prob]
-            meta = self._metaheuristics[index_meta]
-            prob_class, prob_attributes, prob_key_attributes = prob
-            meta_class, meta_attributes, meta_key_attributes = meta
-            b_str += line
-            b_str += "|{}|\n".format(" Problem : {}".format(
-                prob_class.__name__).center(60))
-            b_str += "|{}|\n".format(" Meta : {}".format(
-                meta_class.__name__).center(60))
-            b_str += "|{}|\n".format(" Nb runs : {:d}".format(
-                self._nb_runs).center(60))
-            b_str += line
-            b_str += str(stats)
+        for index_prob in self._results:
+            for index_meta in self._results[index_prob]:
+                stats = self._results[index_prob][index_meta]
+                prob = self._problems[index_prob]
+                meta = self._metaheuristics[index_meta]
+                prob_class, prob_attributes, prob_key_attributes = prob
+                meta_class, meta_attributes, meta_key_attributes = meta
+                b_str += line
+                b_str += "|{}|\n".format(" Problem : {}".format(
+                    prob_class.__name__).center(60))
+                b_str += "|{}|\n".format(" Meta : {}".format(
+                    meta_class.__name__).center(60))
+                b_str += "|{}|\n".format(" Nb runs : {:d}".format(
+                    self._nb_runs).center(60))
+                b_str += line
+                b_str += str(stats)
         return b_str

@@ -16,12 +16,20 @@ class StatisticsRecorder(object):
     Args:
         nb_run (int): Number of runs that will be made of a metaheuristic on
             the same problem. Strictly positive.
+        problem (Problem): The problem on which the statistics will be
+            computed.
+        metaheuristic (Metaheuristic): The metaheuristic on which the
+            statistics will be computed.
         base_size (int): Base size for the arrays that will hold the data from
             the iterations of the metaheuristic. Default is 256. Strictly
             positive.
 
     Attributes:
         nb_run (int): number of runs on which statistics are compiled.
+        problem (Problem): The problem on which the statistics will be
+            computed.
+        metaheuristic (Metaheuristic): The metaheuristic on which the
+            statistics will be computed.
         nb_iter_per_run (np.array): Array of size 'nb_run' that holds the
             number of iteration made by the metaheuristic for each run.
         nb_iter_total (int): Total number of iterations made in all the runs.
@@ -54,11 +62,14 @@ class StatisticsRecorder(object):
             full run computation.
 
     """
-    def __init__(self, nb_run, base_size=256):
+    def __init__(self, nb_run, problem, metaheuristic, base_size=256):
         if nb_run <= 0:
             raise ValueError("The number of runs must be strictly positive")
         if base_size <= 0:
             raise ValueError("The base size must be strictly positive")
+
+        self.problem = problem
+        self.metaheuristic = metaheuristic
 
         self._nb_iter = np.zeros(nb_run, np.int)
         self._nb_iter_tot = 0
@@ -124,6 +135,13 @@ class StatisticsRecorder(object):
     def nb_iter_total(self):
         return self._nb_iter_tot
 
+
+    def get_run_nb_iterations(self, run_index):
+        return self._nb_iter[run_index]
+
+    def get_run_values(self, run_index):
+        return self._values[run_index]
+
     @property
     def best_values(self):
         return np.array([self._values[i][max_iter - 1] for i, max_iter
@@ -155,6 +173,12 @@ class StatisticsRecorder(object):
         return None
 
     @property
+    def times_iter(self):
+        if self._nb_iter_tot:
+            return self._time[:self._nb_iter_tot]
+        return None
+
+    @property
     def best_time_iter(self):
         if self._nb_iter_tot:
             return np.amin(self._time[:self._nb_iter_tot])
@@ -176,6 +200,12 @@ class StatisticsRecorder(object):
     def std_time_iter(self):
         if self._nb_iter_tot:
             return np.std(self._time[:self._nb_iter_tot])
+        return None
+
+    @property
+    def time_tots(self):
+        if np.any(self._time_tot):
+            return self._time_tot
         return None
 
     @property

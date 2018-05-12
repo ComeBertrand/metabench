@@ -39,6 +39,10 @@ class Problem(object):
         self.known_min = known_min
         self.neighborhood = neighborhood
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
     def evaluate(self, solution, modifs=None):
         """Evaluate the fitness of a solution.
 
